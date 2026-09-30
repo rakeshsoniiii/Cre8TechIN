@@ -33,13 +33,14 @@ The original gold Cre8TechIN crest is extracted intact from the supplied PDF and
 11. **Proof:** projects, code review, and earned evidence of work.
 12. **Growth:** animated figures grounded in the current Cre8TechIN homepage.
 13. **Your turn:** an energetic transition followed by a direct invitation.
-14. **The portal:** nested WebGL rings and a link to the real programs page.
+14. **The portal:** a single extruded architectural doorway and a link to the real programs page.
 
 ## Implementation
 
 - **HTML, CSS, JavaScript:** semantic content stays in the document, separate from the decorative canvas. No frontend framework, backend, or build pipeline is needed.
-- **Three.js 0.184.0:** one fixed WebGL renderer, one camera, and four reusable scene groups. Procedural geometry avoids model downloads and keeps assets small.
-- **Anime.js 4.5.0:** bundled from the supplied `anime/` reference, used for entrance timing, section reveals, tab transitions, and count-up moments.
+- **Three.js 0.184.0:** one fixed WebGL renderer, one camera, and four chapter-exclusive scene groups. Procedural geometry avoids model downloads and keeps assets small.
+- **Anime.js 4.5.0:** bundled from the supplied `anime/` reference, used for the initial entrance and program tab transitions.
+- **Scroll choreography:** native Web Animations are paused and scrubbed from cached layout positions. Text, manifesto lines, project cards, photo parallax, identity card, and proof art move with scroll in both directions. Reduced motion shows the complete content immediately. Each WebGL object appears in exactly one chapter: sculpture → entrance, laptop → build, network → mentors, doorway → join.
 - **Native scrolling:** no scroll hijacking. Cached section bounds determine the chapter, object placement, scale, and rotation. Frame-rate-independent interpolation softens group transitions. Pointer movement adds a small secondary tilt.
 - **CSS 3D:** project artifacts and the two-sided ID use perspective, transforms, and backface culling.
 - **Native dialog:** Escape, modal focus containment, accessible labels, backdrop dismissal, and focus restoration.
@@ -62,7 +63,7 @@ The main code is in `dist/app.js`, structure in `dist/index.html`, and styling i
 - The renderer requests the low-power GPU profile. Rendering work pauses in hidden tabs.
 - Mobile stacks content and reserves space below the opening text for a smaller sculpture. Program/project grids become a single column; navigation becomes an accessible menu.
 - `prefers-reduced-motion` is respected on first load and when changed. A persistent page control pauses decorative animation and smooth scrolling. Paused 3D only renders on layout/scroll changes.
-- A lightweight CSS orbital illustration and readable HTML survive WebGL failure. The content and external navigation remain available without JavaScript; enhanced interactions require JavaScript.
+- A lightweight CSS sculpture silhouette and readable HTML survive WebGL failure. The content and external navigation remain available without JavaScript; enhanced interactions require JavaScript.
 - Fonts are self-hosted WOFF2 files with `font-display: swap`, preload hints, and system fallbacks. The original workshop image is encoded as a roughly 109 KB WebP and lazy-loaded. All runtime assets are local.
 
 ## Verification

@@ -6,13 +6,24 @@ const reduced = matchMedia("(prefers-reduced-motion: reduce)");
 let paused = reduced.matches;
 let dirty = true,
   active = 0,
-  sectionProgress = 0,
   bounds = [];
 let heroArtCenter = 700;
+let joinArtCenter = 0;
+const scrollTracks = [];
+const clamp = (value) => Math.max(0, Math.min(1, value));
+let scrollFrame = 0;
 function measure() {
   bounds = sections.map((s) => ({ top: s.offsetTop, height: s.offsetHeight }));
   const copy = document.querySelector(".hero-copy");
   heroArtCenter = copy.offsetTop + copy.offsetHeight + 220;
+  const join = document.querySelector(".join");
+  const joinNote = document.querySelector(".join-note");
+  joinArtCenter = join.offsetTop + joinNote.offsetTop + joinNote.offsetHeight + 185;
+  scrollTracks.forEach((track) => {
+    let top = 0;
+    for (let node = track.el; node; node = node.offsetParent) top += node.offsetTop;
+    track.top = top;
+  });
   updateScroll();
 }
 function updateScroll() {
@@ -21,16 +32,6 @@ function updateScroll() {
     0,
     bounds.findLastIndex((s) => probe >= s.top),
   );
-  const b = bounds[active];
-  sectionProgress = b
-    ? Math.max(
-        0,
-        Math.min(
-          1,
-          (scrollY - b.top) / Math.max(1, b.height - innerHeight * 0.2),
-        ),
-      )
-    : 0;
   document.querySelector(".reading-progress").style.transform =
     `scaleX(${scrollY / Math.max(1, document.documentElement.scrollHeight - innerHeight)})`;
   document.querySelector("#chapter-number").textContent = String(
@@ -38,14 +39,25 @@ function updateScroll() {
   ).padStart(2, "0");
   document.querySelector("#chapter-label").textContent =
     sections[active].dataset.chapter;
-  document
-    .querySelectorAll(".header nav a")
-    .forEach((a) =>
-      a.classList.toggle("active", a.hash === `#${sections[active].id}`),
-    );
+  const navSection = active >= 8 ? "projects" : active >= 7 ? "programs" : active >= 5 ? "mentors" : "story";
+  document.querySelectorAll(".header nav a").forEach((a) => {
+    const selected = a.hash === `#${navSection}` && active < 13;
+    a.classList.toggle("active", selected);
+    if (selected) a.setAttribute("aria-current", "location");
+    else a.removeAttribute("aria-current");
+  });
+  document.querySelector(".header").classList.toggle("scrolled", scrollY > 40);
+  document.querySelector("#world").dataset.chapter = sections[active].id;
+  scrollTracks.forEach((track) => {
+    const progress = paused ? 1 : clamp((scrollY + innerHeight * 0.94 - track.top) / (innerHeight * track.range));
+    track.animation.currentTime = progress * 1000;
+  });
   dirty = true;
 }
-addEventListener("scroll", updateScroll, { passive: true });
+addEventListener("scroll", () => {
+  if (scrollFrame) return;
+  scrollFrame = requestAnimationFrame(() => { scrollFrame = 0; updateScroll(); });
+}, { passive: true });
 addEventListener("resize", measure);
 document.fonts.ready.then(measure);
 measure();
@@ -67,6 +79,7 @@ function syncMotion() {
   motionButton.firstElementChild.textContent = paused ? "▷" : "Ⅱ";
   motionButton.title = paused ? "Enable animations" : "Pause animations";
   document.documentElement.classList.toggle("motion-paused", paused);
+  updateScroll();
   dirty = true;
 }
 motionButton.addEventListener("click", () => {
@@ -176,6 +189,7 @@ function chooseTrack(tab) {
       duration: 350,
       ease: "outQuad",
     });
+  measure();
 }
 tabs.forEach((tab, i) => {
   tab.addEventListener("click", () => chooseTrack(tab));
@@ -300,45 +314,26 @@ card.addEventListener("pointermove", (e) => {
   card.style.transform = `rotateX(${-y * 14}deg) rotateY(${(card.classList.contains("flipped") ? 180 : 0) + x * 22}deg) rotateZ(3deg)`;
 });
 card.addEventListener("pointerleave", () => (card.style.transform = ""));
-const reveals = new IntersectionObserver(
-  (entries) =>
-    entries.forEach(({ target, isIntersecting }) => {
-      if (!isIntersecting) return;
-      if (!paused)
-        animate(target, {
-          opacity: [0.2, 1],
-          translateY: [25, 0],
-          duration: 850,
-          ease: "outExpo",
-        });
-      reveals.unobserve(target);
-    }),
-  { threshold: 0.18 },
-);
-document
-  .querySelectorAll(
-    ".scene:not(.hero) .display,.scene:not(.hero) .eyebrow,.project-card,.proof-list",
-  )
-  .forEach((el) => reveals.observe(el));
-const counters = new IntersectionObserver(
-  (entries) =>
-    entries.forEach(({ target, isIntersecting }) => {
-      if (!isIntersecting) return;
-      const total = Number(target.dataset.count);
-      if (!paused) {
-        const value = { n: 0 };
-        animate(value, {
-          n: total,
-          duration: 1400,
-          ease: "outExpo",
-          onUpdate: () => (target.textContent = Math.round(value.n)),
-        });
-      }
-      counters.unobserve(target);
-    }),
-  { threshold: 0.8 },
-);
-document.querySelectorAll("[data-count]").forEach((el) => counters.observe(el));
+// Paused Web Animations are scrubbed by native scroll, including reverse scrolling.
+// Individual translate/rotate properties preserve the card's hover and flip transforms.
+function scrollAnimate(el, frames, range = 0.55) {
+  const animation = el.animate(frames, { duration: 1000, fill: "both", easing: "linear" });
+  animation.pause();
+  scrollTracks.push({ el, animation, range, top: 0 });
+}
+document.querySelectorAll(".scene:not(.hero) h2,.scene:not(.hero) .section-copy,.old-loop > span,.manifesto-words > span,.feedback-flow > span,.program-tabs > button,.project-card,.proof-list > span,.stats > div,.join-button").forEach((el, i) => {
+  scrollAnimate(el, [{ opacity: 0.12, translate: "0 32px" }, { opacity: 1, translate: "0 0" }], 0.22 + (i % 3) * 0.025);
+});
+scrollAnimate(document.querySelector(".discipline-strip"), [{ translate: "16% 0" }, { translate: "-10% 0" }], 1.5);
+scrollAnimate(document.querySelector(".community-photo"), [{ scale: 1.18, translate: "0 -3%" }, { scale: 1, translate: "0 3%" }], 1.7);
+scrollAnimate(document.querySelector(".question-line"), [{ scale: "0 1" }, { scale: "1 1" }], 0.55);
+scrollAnimate(document.querySelector(".id-stage"), [{ rotate: "-8deg", translate: "0 70px" }, { rotate: "0deg", translate: "0 0" }], 0.9);
+scrollAnimate(document.querySelector(".proof-art"), [{ rotate: "-18deg", scale: 0.8 }, { rotate: "0deg", scale: 1 }], 1);
+scrollAnimate(document.querySelector(".hype h2"), [{ scale: 0.85, opacity: 0.15 }, { scale: 1, opacity: 1 }], 0.85);
+document.querySelectorAll(".artifact-cube,.shield-object,.study-object").forEach((el) => {
+  scrollAnimate(el, [{ rotate: "0 1 0 -28deg", scale: 0.85 }, { rotate: "0 1 0 22deg", scale: 1 }], 1.1);
+});
+measure();
 
 let renderer;
 try {
@@ -709,68 +704,30 @@ if (renderer) {
   const portal = new THREE.Group();
   scene.add(portal);
   portal.scale.setScalar(0.001);
-  for (let i = 0; i < 12; i++) {
-    const g = new THREE.TorusGeometry(
-      2.3,
-      0.022 + (i === 0 ? 0.028 : 0),
-      8,
-      120,
-    );
-    const m = new THREE.MeshBasicMaterial({
-      color: i % 3 === 0 ? 0xd2c095 : 0x887a5b,
-      transparent: true,
-      opacity: 0.7 - i * 0.045,
-    });
-    const mesh = new THREE.Mesh(g, m);
-    mesh.position.z = -i * 0.5;
-    mesh.scale.set(1, 1.3, 1);
-    portal.add(mesh);
-  }
-  const portalPoints = [];
-  for (let i = 0; i < 200; i++) {
-    const a = i * 2.399963;
-    const rad = 2.35 + (i % 7) * 0.065;
-    portalPoints.push(
-      Math.cos(a) * rad,
-      Math.sin(a) * rad * 1.3,
-      -(i % 12) * 0.5,
-    );
-  }
-  const portalGeo = new THREE.BufferGeometry();
-  portalGeo.setAttribute(
-    "position",
-    new THREE.Float32BufferAttribute(portalPoints, 3),
-  );
-  portal.add(
-    new THREE.Points(
-      portalGeo,
-      new THREE.PointsMaterial({
-        color: 0xdbc89b,
-        size: 0.035,
-        transparent: true,
-        opacity: 0.8,
-      }),
-    ),
-  );
+  // One architectural doorway, reserved exclusively for the closing chapter.
+  const arch = new THREE.Shape();
+  arch.moveTo(-1.45, -2.2);
+  arch.lineTo(-1.45, 0.85);
+  arch.absarc(0, 0.85, 1.45, Math.PI, 0, true);
+  arch.lineTo(1.45, -2.2);
+  arch.lineTo(1.19, -2.2);
+  arch.lineTo(1.19, 0.85);
+  arch.absarc(0, 0.85, 1.19, 0, Math.PI, false);
+  arch.lineTo(-1.19, -2.2);
+  arch.closePath();
+  const doorway = new THREE.Mesh(new THREE.ExtrudeGeometry(arch, {
+    depth: 0.5, bevelEnabled: true, bevelThickness: 0.04, bevelSize: 0.04, bevelSegments: 3, curveSegments: 48
+  }), gold);
+  portal.add(doorway);
+  const threshold = new THREE.Mesh(new THREE.BoxGeometry(3.5, 0.16, 1.9), metal);
+  threshold.position.set(0, -2.25, 0.25);
+  portal.add(threshold);
   const groups = { orbit, laptop, network, portal };
-  const settings = [
-    ["orbit", 2.65, 0, 1.12],
-    ["orbit", 2.6, -0.1, 1.04],
-    ["quiet", 0, 0, 0],
-    ["orbit", 3.0, 0, 0.95],
-    ["laptop", 2.55, -0.25, 1.07],
-    ["network", 2.75, 0, 1.08],
-    ["quiet", 0, 0, 0],
-    ["quiet", 0, 0, 0],
-    ["quiet", 0, 0, 0],
-    ["quiet", 0, 0, 0],
-    ["quiet", 0, 0, 0],
-    ["network", 3.6, -0.2, 1.2],
-    ["orbit", 0, 0, 0.9],
-    ["portal", 0, 0, 1.5],
-  ];
-  let last = 0,
-    elapsed = 0;
+  const placements = {
+    orbit: [2.65, 0, 1.12], laptop: [2.55, -0.25, 1.07],
+    network: [2.75, 0, 1.08], portal: [3.05, -0.1, 1.03]
+  };
+  let last = 0;
   renderer.domElement.addEventListener("webglcontextlost", (e) => {
     e.preventDefault();
     document.body.classList.remove("webgl-ready");
@@ -786,21 +743,29 @@ if (renderer) {
     if (document.hidden) return;
     const dt = Math.min((now - last) / 1000, 0.05);
     last = now;
-    if (!paused) elapsed += dt;
     if (paused && !dirty) return;
     dirty = false;
     const mobile = innerWidth < 760;
-    const [type, tx, ty, scale] = settings[active];
-    const blend = paused ? 1 : 1 - Math.exp(-dt * 5);
-    let visualY = mobile ? (active === 13 ? 0 : active === 12 ? 0 : -2.35) : ty;
+    const type = sections[active].dataset.world;
+    const [tx, ty, scale] = placements[type] || [0, 0, 0];
+    const b = bounds[active];
+    const travel = paused ? 0.5 : clamp((scrollY + innerHeight * 0.45 - b.top) / b.height);
+    const entrance = active === 0 || paused ? 1 : THREE.MathUtils.smoothstep(travel, 0, 0.15);
+    const exit = active === 13 || paused ? 1 : 1 - THREE.MathUtils.smoothstep(travel, 0.72, 1);
+    const presence = entrance * exit;
+    const blend = paused ? 1 : 1 - Math.exp(-dt * 9);
+    let visualY = mobile ? (active === 13 ? -2.3 : -2.35) : ty;
     if (mobile && active === 0)
       visualY =
         (0.5 - (heroArtCenter - scrollY) / innerHeight) *
         (2 * 11 * Math.tan((21 * Math.PI) / 180));
+    if (mobile && active === 13)
+      visualY = (0.5 - (joinArtCenter - scrollY) / innerHeight) *
+        (2 * 11 * Math.tan((21 * Math.PI) / 180));
     const visualX = mobile ? 0 : tx;
     const size = mobile
       ? active === 13
-        ? 1.2
+        ? 0.62
         : active === 12
           ? 0.65
           : active === 6
@@ -810,7 +775,7 @@ if (renderer) {
               : 0.8
       : scale;
     for (const [name, group] of Object.entries(groups)) {
-      const target = name === type ? size : 0.001;
+      const target = name === type ? Math.max(0.001, size * presence) : 0.001;
       group.scale.lerp(new THREE.Vector3(target, target, target), blend);
       group.visible = group.scale.x > 0.015;
       if (name === type) {
@@ -830,36 +795,35 @@ if (renderer) {
       tiltY = paused ? 0 : pointer.y * 0.12;
     orbit.rotation.set(
       0.25 + tiltY,
-      -0.4 + Math.sin(elapsed * 0.16) * 0.12 + tiltX + sectionProgress * 0.7,
+      -0.4 + tiltX + travel * 1.1,
       -0.25,
     );
-    knot.rotation.y = Math.sin(elapsed * 0.2) * 0.04;
+    knot.rotation.y = travel * 0.15;
     plates.forEach((plate, i) => {
       plate.position.z =
-        -0.35 - i * 0.18 - (active === 1 ? sectionProgress * (i + 1) * 0.9 : 0);
+        -0.35 - i * 0.18 - travel * (i + 1) * 0.7;
     });
     laptop.rotation.set(
       0.22 + tiltY,
-      -0.28 + tiltX + sectionProgress * 0.35,
+      -0.5 + tiltX + travel * 0.9,
       -0.04,
     );
+    screenGroup.rotation.x = -1.3 + THREE.MathUtils.smoothstep(travel, 0, 0.65) * 1.15;
     network.rotation.set(
       0.2 + tiltY,
-      elapsed * 0.08 + sectionProgress * 0.4 + tiltX,
+      travel * 1.6 + tiltX,
       -0.2,
     );
-    hub.rotation.set(elapsed * 0.2, elapsed * 0.3, 0);
-    halo.rotation.set(1.1, 0.3 + elapsed * 0.2, 0.2);
-    portal.rotation.y = tiltX * 0.3;
-    portal.rotation.z = paused ? 0 : Math.sin(elapsed * 0.12) * 0.025;
-    portal.position.z = active === 13 ? sectionProgress * 1.3 : 0;
-    const rushing = active === 12 && sectionProgress < 0.4 && !paused;
-    stars.rotation.z = elapsed * 0.004;
-    stars.position.z = rushing ? (elapsed * 4) % 3 : 0;
+    hub.rotation.set(travel, travel * 2, 0);
+    halo.rotation.set(1.1, 0.3 + travel * 2, 0.2);
+    portal.rotation.y = -0.45 + travel * 0.65 + tiltX * 0.3;
+    portal.rotation.z = 0;
+    portal.position.z = active === 13 ? travel * 0.3 : 0;
+    stars.visible = active === 0;
+    stars.rotation.z = travel * 0.04;
     stars.material.opacity = type === "quiet" ? 0.08 : 0.28;
-    stars.scale.z = rushing ? 2.5 : 1;
     satellites.forEach((m, i) => {
-      const a = (i * Math.PI * 2) / 4 + elapsed * 0.025;
+      const a = (i * Math.PI * 2) / 4 + travel * 0.6;
       m.position.set(Math.cos(a) * 2.7, Math.sin(a) * 2, Math.sin(a * 2) * 0.8);
       m.rotation.set(a, a, 0);
     });

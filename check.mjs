@@ -25,6 +25,11 @@ assert.equal(
   14,
   "All 14 story chapters must be present",
 );
+const worlds = [...html.matchAll(/data-world="([^"]+)"/g)].map((match) => match[1]);
+for (const world of ["orbit", "laptop", "network", "portal"]) {
+  assert.equal(worlds.filter((value) => value === world).length, 1,
+    `${world} must belong to exactly one chapter, never repeat across the story`);
+}
 assert(
   html.includes("https://cre8techin.in/programs/"),
   "Join must lead to the real programs page",
