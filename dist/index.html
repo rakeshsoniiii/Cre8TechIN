@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#08090d" />
+    <meta name="theme-color" content="#101110" />
     <meta
       name="description"
       content="Go from curious to creator. Explore a world of real projects, mentor feedback, and community with Cre8TechIN."
@@ -11,6 +11,20 @@
     <title>Cre8TechIN — For the ones who build.</title>
     <link rel="icon" href="assets/brand-original.jpg" />
     <link rel="stylesheet" href="style.css" />
+    <link
+      rel="preload"
+      href="assets/bricolage.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="assets/manrope.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
   </head>
   <body>
     <a class="skip" href="#story">Skip to the story</a>
@@ -24,10 +38,7 @@
           width="44"
           height="44"
           alt="Cre8TechIN original gold crest"
-        /><span
-          >Cre8Tech<span class="brand-in">IN</span
-          ><span class="brand-dot">®</span></span
-        ></a
+        /><span>Cre8Tech<span class="brand-in">IN</span></span></a
       >
       <nav aria-label="Main navigation">
         <a href="#story">The story</a><a href="#programs">Programs</a
@@ -42,7 +53,7 @@
         aria-label="Open navigation"
         aria-expanded="false"
       >
-        ☰
+        <span></span><span></span>
       </button>
     </header>
     <main>
@@ -53,43 +64,42 @@
         data-chapter="The spark"
       >
         <div class="hero-topline">
-          <span><i></i> A SPACE FOR THE NEXT GENERATION OF BUILDERS</span
-          ><span class="edition">INDEPENDENT MINDS. SHARED AMBITION.</span>
+          <span>Independent minds. Shared ambition.</span
+          ><span class="edition">A new chapter in learning / Est. India</span>
         </div>
         <div class="hero-copy">
-          <p class="eyebrow">
-            <span class="tiny-cross">✳</span> YOUR CURIOSITY BROUGHT YOU HERE.
-          </p>
           <h1>
-            Stop watching.<br />Start
-            <span class="gradient-text">building.</span>
+            <span>For the</span><span>ones who</span
+            ><span class="hero-build"
+              >build<span class="hero-period">.</span></span
+            >
           </h1>
           <p class="hero-description">
-            College teaches you what to learn.<br />We give you a world to build
-            it in.
+            College teaches you what to learn.<br />This is where you make it
+            real.
           </p>
           <a class="button primary" href="#story"
-            >Enter the experience <span>↗</span></a
-          ><span class="hero-note">One spark. Endless possibilities.</span>
+            >Explore the story <span>↗</span></a
+          ><span class="hero-note">Real projects. People in your corner.</span>
         </div>
         <div class="orbital-label label-code" aria-hidden="true">
-          <span>⌘</span> CODE <i></i>
+          01 / THINK IT
         </div>
         <div class="orbital-label label-ai" aria-hidden="true">
-          <span>✳</span> ARTIFICIAL INTELLIGENCE
+          02 / BUILD IT
         </div>
         <div class="orbital-label label-design" aria-hidden="true">
-          <span>◇</span> DESIGN
+          03 / MAKE IT YOURS
         </div>
         <div class="object-caption" aria-hidden="true">
-          <span class="caption-line"></span> THE SPARK
-          <small>IDEAS BECOME REAL HERE.</small>
+          <span class="caption-line"></span> BUILT FROM POSSIBILITY
+          <small>Move your cursor. Change your perspective.</small>
         </div>
         <div class="hero-bottom">
           <a class="scroll-cue" href="#story"
             ><span>↓</span> SCROLL TO DISCOVER</a
           >
-          <p>REAL PROJECTS. REAL PEOPLE. <b>REAL POSSIBILITIES.</b></p>
+          <p>A PLACE TO BUILD. <b>A REASON TO BEGIN.</b></p>
           <span class="coordinate">01 — 14</span>
         </div>
       </section>
@@ -99,7 +109,6 @@
         data-world="orbit"
         data-chapter="A world of possibility"
       >
-        <p class="eyebrow">02 / ENTER THE WORLD</p>
         <h2 class="display">
           That idea in<br />your head?<br /><em>It belongs here.</em>
         </h2>
@@ -119,7 +128,6 @@
         data-world="quiet"
         data-chapter="The real question"
       >
-        <p class="eyebrow">03 / LET'S BE HONEST</p>
         <div class="old-loop">
           <span>You learn.</span><span>You watch tutorials.</span
           ><span>You collect certificates.</span>
@@ -159,10 +167,7 @@
         data-world="laptop"
         data-chapter="Make it real"
       >
-        <div class="section-heading">
-          <p class="eyebrow">05 / BUILD</p>
-          <span class="chapter-word">01 — THE WORK</span>
-        </div>
+        <div class="section-heading"></div>
         <div class="split-copy">
           <h2 class="display">
             Your first commit.<br /><em>Not your last<br />tutorial.</em>
@@ -191,7 +196,6 @@
         data-world="network"
         data-chapter="Build with guidance"
       >
-        <p class="eyebrow">06 / LEARN</p>
         <h2 class="display">You don't<br />build <em>alone.</em></h2>
         <p class="section-copy">
           The difference between getting stuck and getting better? Someone who
@@ -214,8 +218,15 @@
         data-world="network"
         data-chapter="Find your people"
       >
+        <img
+          class="community-photo"
+          src="assets/workshop.webp"
+          alt="Illustrative scene of student builders collaborating at a workshop table"
+          width="1536"
+          height="1024"
+          loading="lazy"
+        />
         <div class="community-copy">
-          <p class="eyebrow">07 / FIND YOUR PEOPLE</p>
           <h2 class="display">Big ideas.<br /><em>Better together.</em></h2>
           <p class="section-copy">
             Your next collaborator might think in pixels. Or Python. Or
@@ -239,7 +250,6 @@
       >
         <div class="section-heading">
           <p class="eyebrow">08 / WHAT YOU CAN BECOME</p>
-          <span class="chapter-word">FIND YOUR STARTING POINT</span>
         </div>
         <h2 class="display">
           One first step.<br /><em>So many directions.</em>
@@ -333,13 +343,10 @@
         data-world="artifacts"
         data-chapter="Imagine your first project"
       >
-        <div class="section-heading">
-          <p class="eyebrow">09 / THE POSSIBILITIES ARE REAL</p>
-          <span class="chapter-word">PROJECT CONCEPTS FROM THE CHALLENGE</span>
-        </div>
+        <div class="section-heading"></div>
         <h2 class="display">Built from a<br /><em>“what if?”</em></h2>
         <div class="projects-intro">
-          <p>Imagine turning one of these ideas into your next project.</p>
+          <p>Three project concepts. One could be your first build.</p>
           <span>SELECT A PROJECT TO EXPLORE ↘</span>
         </div>
         <div class="project-grid">
@@ -478,7 +485,6 @@
           <p>BUILT.<br />REVIEWED.<br />VERIFIABLE.</p>
         </div>
         <div>
-          <p class="eyebrow">11 / PROOF, NOT JUST A PROMISE</p>
           <h2 class="display">Let your work<br /><em>do the talking.</em></h2>
           <p class="section-copy">
             A repository people can explore. Feedback that made you better. A
@@ -498,7 +504,6 @@
         data-world="network"
         data-chapter="Part of something bigger"
       >
-        <p class="eyebrow">12 / THE NEXT CHAPTER IS A SHARED ONE</p>
         <h2 class="display">A growing world.<br /><em>Room for you.</em></h2>
         <div class="stats">
           <div>
@@ -528,7 +533,6 @@
         data-world="rush"
         data-chapter="Your turn"
       >
-        <p class="eyebrow">13 / THIS IS WHERE YOU COME IN</p>
         <p class="hype-intro">YOU'VE SEEN WHAT WE BUILD.</p>
         <h2>NOW<br />BUILD <em>YOURS.</em></h2>
         <a href="#join" class="hype-arrow" aria-label="Continue to join">↓</a>

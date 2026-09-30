@@ -12,7 +12,7 @@ let heroArtCenter = 700;
 function measure() {
   bounds = sections.map((s) => ({ top: s.offsetTop, height: s.offsetHeight }));
   const copy = document.querySelector(".hero-copy");
-  heroArtCenter = copy.offsetTop + copy.offsetHeight + 185;
+  heroArtCenter = copy.offsetTop + copy.offsetHeight + 220;
   updateScroll();
 }
 function updateScroll() {
@@ -86,14 +86,24 @@ document.querySelector(".menu-toggle").addEventListener("click", (e) => {
     open ? "Close navigation" : "Open navigation",
   );
 });
-document.querySelectorAll(".header nav a").forEach((a) =>
-  a.addEventListener("click", () => {
-    document.querySelector(".header").classList.remove("open");
-    document
-      .querySelector(".menu-toggle")
-      .setAttribute("aria-expanded", "false");
-  }),
-);
+function closeMenu() {
+  document.querySelector(".header").classList.remove("open");
+  const toggle = document.querySelector(".menu-toggle");
+  toggle.setAttribute("aria-expanded", "false");
+  toggle.setAttribute("aria-label", "Open navigation");
+}
+document
+  .querySelectorAll(".header nav a, .nav-join")
+  .forEach((a) => a.addEventListener("click", closeMenu));
+document.addEventListener("keydown", (e) => {
+  if (
+    e.key === "Escape" &&
+    document.querySelector(".header").classList.contains("open")
+  ) {
+    closeMenu();
+    document.querySelector(".menu-toggle").focus();
+  }
+});
 if (!paused)
   animate(".hero-copy > *", {
     opacity: [0, 1],
@@ -359,76 +369,154 @@ if (renderer) {
     100,
   );
   camera.position.z = 11;
-  scene.add(new THREE.AmbientLight(0xb2a1e8, 2));
-  const key = new THREE.DirectionalLight(0xe0d4ff, 5);
+  scene.add(new THREE.AmbientLight(0xd7d2c8, 1.5));
+  const key = new THREE.DirectionalLight(0xfff0d5, 4);
   key.position.set(2, 4, 5);
   scene.add(key);
-  const cyan = new THREE.PointLight(0x76e7ff, 32, 20);
+  const cyan = new THREE.PointLight(0xffffff, 24, 20);
   cyan.position.set(-3, -2, 4);
   scene.add(cyan);
-  const purple = new THREE.PointLight(0x9650ff, 45, 20);
+  const purple = new THREE.PointLight(0xd3a659, 22, 20);
   purple.position.set(3, 1, 3);
   scene.add(purple);
+  // A small procedural studio environment gives the sculpture real reflections.
+  const studio = document.createElement("canvas");
+  studio.width = 1024;
+  studio.height = 512;
+  const light = studio.getContext("2d");
+  light.fillStyle = "#151515";
+  light.fillRect(0, 0, 1024, 512);
+  [
+    [140, 55, 90, 350],
+    [600, 30, 210, 390],
+    [930, 100, 35, 240],
+  ].forEach(([x, y, w, h]) => {
+    const glow = light.createLinearGradient(x, y, x + w, y);
+    glow.addColorStop(0, "#393734");
+    glow.addColorStop(0.35, "#fff5dc");
+    glow.addColorStop(1, "#8e877a");
+    light.fillStyle = glow;
+    light.fillRect(x, y, w, h);
+  });
+  const environment = new THREE.CanvasTexture(studio);
+  environment.mapping = THREE.EquirectangularReflectionMapping;
+  environment.colorSpace = THREE.SRGBColorSpace;
+  const pmrem = new THREE.PMREMGenerator(renderer);
+  scene.environment = pmrem.fromEquirectangular(environment).texture;
+  environment.dispose();
+  pmrem.dispose();
   const orbit = new THREE.Group();
   scene.add(orbit);
-  const metal = new THREE.MeshStandardMaterial({
-    color: 0x8a5bd5,
-    metalness: 0.62,
-    roughness: 0.24,
+  const metal = new THREE.MeshPhysicalMaterial({
+    color: 0xaaa59b,
+    metalness: 1,
+    roughness: 0.23,
+    clearcoat: 0.55,
+    envMapIntensity: 1.4,
   });
-  const knot = new THREE.Mesh(
-    new THREE.TorusKnotGeometry(1.28, 0.33, 180, 24, 2, 3),
-    metal,
-  );
+  const gold = new THREE.MeshPhysicalMaterial({
+    color: 0xb49a63,
+    metalness: 1,
+    roughness: 0.28,
+    clearcoat: 0.3,
+    envMapIntensity: 1.3,
+  });
+  const shape = new THREE.Shape();
+  const outline = [
+    [-0.68, 1.8],
+    [0.68, 1.8],
+    [1.18, 1.3],
+    [1.18, 0.7],
+    [0.52, 0],
+    [1.18, -0.7],
+    [1.18, -1.3],
+    [0.68, -1.8],
+    [-0.68, -1.8],
+    [-1.18, -1.3],
+    [-1.18, -0.7],
+    [-0.52, 0],
+    [-1.18, 0.7],
+    [-1.18, 1.3],
+  ];
+  outline.forEach(([x, y], i) => (i ? shape.lineTo(x, y) : shape.moveTo(x, y)));
+  shape.closePath();
+  for (const sign of [-1, 1]) {
+    const hole = new THREE.Path();
+    [
+      [-0.39, 0.58],
+      [-0.62, 0.83],
+      [-0.62, 1.13],
+      [-0.34, 1.4],
+      [0.34, 1.4],
+      [0.62, 1.13],
+      [0.62, 0.83],
+      [0.39, 0.58],
+    ].forEach(([x, y], i) =>
+      i ? hole.lineTo(x, y * sign) : hole.moveTo(x, y * sign),
+    );
+    hole.closePath();
+    shape.holes.push(hole);
+  }
+  const sculptureGeo = new THREE.ExtrudeGeometry(shape, {
+    depth: 0.32,
+    bevelEnabled: true,
+    bevelThickness: 0.045,
+    bevelSize: 0.045,
+    bevelSegments: 3,
+    steps: 1,
+  });
+  sculptureGeo.center();
+  const knot = new THREE.Mesh(sculptureGeo, [metal, gold]);
   orbit.add(knot);
-  const sphere = new THREE.Mesh(
-    new THREE.IcosahedronGeometry(0.79, 1),
-    new THREE.MeshPhysicalMaterial({
-      color: 0xb49af1,
-      metalness: 0.7,
-      roughness: 0.18,
-      flatShading: true,
-    }),
-  );
-  orbit.add(sphere);
-  const wire = new THREE.LineSegments(
-    new THREE.EdgesGeometry(sphere.geometry),
+  const plates = [];
+  for (let i = 0; i < 2; i++) {
+    const plate = new THREE.Mesh(sculptureGeo, i ? metal : gold);
+    plate.scale.set(1, 1, 0.2);
+    plate.position.z = -0.35 - i * 0.18;
+    orbit.add(plate);
+    plates.push(plate);
+  }
+  const blueprint = new THREE.LineSegments(
+    new THREE.EdgesGeometry(sculptureGeo, 25),
     new THREE.LineBasicMaterial({
-      color: 0xe1d0ff,
+      color: 0xd8bb7f,
       transparent: true,
-      opacity: 0.38,
+      opacity: 0.12,
     }),
   );
-  sphere.add(wire);
+  blueprint.scale.setScalar(1.19);
+  blueprint.position.z = -0.8;
+  orbit.add(blueprint);
   const rings = [];
   for (let i = 0; i < 3; i++) {
     const ring = new THREE.Mesh(
-      new THREE.TorusGeometry(2.1 + i * 0.23, i === 0 ? 0.019 : 0.008, 8, 150),
+      new THREE.TorusGeometry(1.6 + i * 0.34, 0.004, 6, 120),
       new THREE.MeshBasicMaterial({
-        color: i === 1 ? 0xc7e8a0 : 0x8265ad,
+        color: 0xa69574,
         transparent: true,
-        opacity: i === 0 ? 0.7 : 0.4,
+        opacity: i === 0 ? 0.3 : 0.13,
       }),
     );
-    ring.rotation.set(1.05 + i * 0.43, 0.4 + i * 0.5, -0.4);
+    ring.rotation.set(Math.PI / 2, 0, 0);
+    ring.position.y = -2.1;
     orbit.add(ring);
     rings.push(ring);
   }
   const satellites = [];
-  for (let i = 0; i < 7; i++) {
+  for (let i = 0; i < 4; i++) {
     const m = new THREE.Mesh(
-      new THREE.OctahedronGeometry(i % 2 ? 0.13 : 0.21),
+      new THREE.BoxGeometry(0.18, 0.18, 0.18),
       new THREE.MeshStandardMaterial({
-        color: i % 3 === 0 ? 0xd3f995 : 0x9770e5,
-        metalness: 0.45,
-        roughness: 0.3,
+        color: 0xc3ae83,
+        metalness: 1,
+        roughness: 0.25,
       }),
     );
     orbit.add(m);
     satellites.push(m);
   }
   const coords = [];
-  for (let i = 0; i < 420; i++) {
+  for (let i = 0; i < 160; i++) {
     const rand = (n) => {
       const x = Math.sin(n * 127.1 + 311.7) * 43758.5453;
       return x - Math.floor(x);
@@ -447,10 +535,10 @@ if (renderer) {
   const stars = new THREE.Points(
     starsGeometry,
     new THREE.PointsMaterial({
-      color: 0xc2afef,
-      size: 0.018,
+      color: 0xd4cbbb,
+      size: 0.012,
       transparent: true,
-      opacity: 0.6,
+      opacity: 0.3,
     }),
   );
   scene.add(stars);
@@ -458,7 +546,7 @@ if (renderer) {
   scene.add(laptop);
   laptop.scale.setScalar(0.001);
   const chassis = new THREE.MeshStandardMaterial({
-    color: 0x252234,
+    color: 0x383735,
     metalness: 0.8,
     roughness: 0.28,
   });
@@ -522,7 +610,7 @@ if (renderer) {
   screenGroup.add(display);
   const keyGeo = new THREE.BoxGeometry(0.22, 0.025, 0.18);
   const keyMaterial = new THREE.MeshStandardMaterial({
-    color: 0x80718f,
+    color: 0x696761,
     metalness: 0.3,
     roughness: 0.5,
   });
@@ -555,15 +643,15 @@ if (renderer) {
   const nodeGeometry = new THREE.IcosahedronGeometry(0.08, 1);
   const nodeMats = [
     new THREE.MeshStandardMaterial({
-      color: 0xbfa0ff,
-      emissive: 0x4b217e,
+      color: 0xc8bda5,
+      emissive: 0x4b412a,
       emissiveIntensity: 0.5,
       metalness: 0.3,
       roughness: 0.35,
     }),
     new THREE.MeshStandardMaterial({
-      color: 0xd5f994,
-      emissive: 0x4f6828,
+      color: 0xd6bd86,
+      emissive: 0x655638,
       emissiveIntensity: 0.5,
     }),
   ];
@@ -596,7 +684,7 @@ if (renderer) {
     new THREE.LineSegments(
       lineGeo,
       new THREE.LineBasicMaterial({
-        color: 0x9672cf,
+        color: 0xa1977c,
         transparent: true,
         opacity: 0.35,
       }),
@@ -605,8 +693,8 @@ if (renderer) {
   const hub = new THREE.Mesh(
     new THREE.IcosahedronGeometry(0.36, 1),
     new THREE.MeshStandardMaterial({
-      color: 0xe0f4b1,
-      emissive: 0x6f8c36,
+      color: 0xe3d1a2,
+      emissive: 0x806a3a,
       emissiveIntensity: 0.5,
       metalness: 0.5,
       roughness: 0.2,
@@ -615,7 +703,7 @@ if (renderer) {
   network.add(hub);
   const halo = new THREE.Mesh(
     new THREE.TorusGeometry(0.55, 0.009, 6, 60),
-    new THREE.MeshBasicMaterial({ color: 0xd0f38a }),
+    new THREE.MeshBasicMaterial({ color: 0xcab27c }),
   );
   network.add(halo);
   const portal = new THREE.Group();
@@ -629,7 +717,7 @@ if (renderer) {
       120,
     );
     const m = new THREE.MeshBasicMaterial({
-      color: i % 3 === 0 ? 0xd2f293 : 0xa075ed,
+      color: i % 3 === 0 ? 0xd2c095 : 0x887a5b,
       transparent: true,
       opacity: 0.7 - i * 0.045,
     });
@@ -657,7 +745,7 @@ if (renderer) {
     new THREE.Points(
       portalGeo,
       new THREE.PointsMaterial({
-        color: 0xc6eeb2,
+        color: 0xdbc89b,
         size: 0.035,
         transparent: true,
         opacity: 0.8,
@@ -672,7 +760,7 @@ if (renderer) {
     ["orbit", 3.0, 0, 0.95],
     ["laptop", 2.55, -0.25, 1.07],
     ["network", 2.75, 0, 1.08],
-    ["network", -2.7, 0, 1.1],
+    ["quiet", 0, 0, 0],
     ["quiet", 0, 0, 0],
     ["quiet", 0, 0, 0],
     ["quiet", 0, 0, 0],
@@ -719,7 +807,7 @@ if (renderer) {
             ? 0.68
             : active === 4
               ? 0.7
-              : 0.58
+              : 0.8
       : scale;
     for (const [name, group] of Object.entries(groups)) {
       const target = name === type ? size : 0.001;
@@ -742,11 +830,14 @@ if (renderer) {
       tiltY = paused ? 0 : pointer.y * 0.12;
     orbit.rotation.set(
       0.25 + tiltY,
-      -0.25 + elapsed * 0.1 + tiltX + sectionProgress * 0.6,
+      -0.4 + Math.sin(elapsed * 0.16) * 0.12 + tiltX + sectionProgress * 0.7,
       -0.25,
     );
-    knot.rotation.y = elapsed * 0.07;
-    sphere.rotation.set(elapsed * 0.12, elapsed * 0.15, 0);
+    knot.rotation.y = Math.sin(elapsed * 0.2) * 0.04;
+    plates.forEach((plate, i) => {
+      plate.position.z =
+        -0.35 - i * 0.18 - (active === 1 ? sectionProgress * (i + 1) * 0.9 : 0);
+    });
     laptop.rotation.set(
       0.22 + tiltY,
       -0.28 + tiltX + sectionProgress * 0.35,
@@ -765,10 +856,10 @@ if (renderer) {
     const rushing = active === 12 && sectionProgress < 0.4 && !paused;
     stars.rotation.z = elapsed * 0.004;
     stars.position.z = rushing ? (elapsed * 4) % 3 : 0;
-    stars.material.opacity = type === "quiet" ? 0.18 : 0.6;
+    stars.material.opacity = type === "quiet" ? 0.08 : 0.28;
     stars.scale.z = rushing ? 2.5 : 1;
     satellites.forEach((m, i) => {
-      const a = (i * Math.PI * 2) / 7 + elapsed * 0.12;
+      const a = (i * Math.PI * 2) / 4 + elapsed * 0.025;
       m.position.set(Math.cos(a) * 2.7, Math.sin(a) * 2, Math.sin(a * 2) * 0.8);
       m.rotation.set(a, a, 0);
     });

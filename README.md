@@ -14,7 +14,7 @@ Open http://127.0.0.1:4173. Run `npm run check` for the release checks.
 
 ## Concept and visual direction
 
-**From spark to something real.** The first object is an impossible-looking purple knot around a faceted idea. As you scroll, the same visual world becomes a laptop, a connected mentor network, and a doorway into your next chapter. Near-black surfaces, restrained lavender, lime calls to action, and oversized editorial typography make the experience feel like a creative technology space.
+**From spark to something real.** A machined, three-dimensional “8” borrows its angular geometry and gold from the original crest. Its layered construction separates as you scroll into the story. The world then becomes a laptop, a mentor network, and a doorway into your next chapter. Charcoal, warm ivory, one gold accent, and large Bricolage Grotesque typography give the experience an editorial identity. Projects use a staggered gallery rather than three identical cards.
 
 The original gold Cre8TechIN crest is extracted intact from the supplied PDF and used in navigation, the brand reveal, the sample student identity, and the footer. It has not been replaced by an invented logo.
 
@@ -26,7 +26,7 @@ The original gold Cre8TechIN crest is extracted intact from the supplied PDF and
 4. **The reveal:** BUILD. LEARN. LAUNCH.
 5. **Build:** a modeled laptop, instanced keyboard, and original code-screen texture.
 6. **Learn:** a mentor hub and connected knowledge network.
-7. **Community:** the network moves across the composition to make room for belonging.
+7. **Community:** an original workshop illustration makes the story about people, not only objects.
 8. **Possibilities:** keyboard-accessible program tabs and a real program destination.
 9. **Projects:** three interactive CSS 3D project concepts with accessible detail dialogs.
 10. **Identity:** a personalized, tilting, reversible sample student ID.
@@ -63,28 +63,36 @@ The main code is in `dist/app.js`, structure in `dist/index.html`, and styling i
 - Mobile stacks content and reserves space below the opening text for a smaller sculpture. Program/project grids become a single column; navigation becomes an accessible menu.
 - `prefers-reduced-motion` is respected on first load and when changed. A persistent page control pauses decorative animation and smooth scrolling. Paused 3D only renders on layout/scroll changes.
 - A lightweight CSS orbital illustration and readable HTML survive WebGL failure. The content and external navigation remain available without JavaScript; enhanced interactions require JavaScript.
-- Fonts currently use Google Fonts with system fallbacks. All graphics, logo assets, and runtime JavaScript are local.
+- Fonts are self-hosted WOFF2 files with `font-display: swap`, preload hints, and system fallbacks. The original workshop image is encoded as a roughly 109 KB WebP and lazy-loaded. All runtime assets are local.
 
 ## Verification
 
 `npm run check` verifies JavaScript syntax, all 14 chapters, unique IDs, internal anchor destinations, required local assets, and the real join destination.
 
-Browser checks cover the desktop hero, WebGL initialization, program selection, project details, ID personalization and flipping, motion controls, mobile navigation, and horizontal overflow at a 390px viewport. These are emulated viewport checks, not a physical low-end Android benchmark.
+Browser checks cover the desktop hero, WebGL initialization, program selection, project details, ID personalization and flipping, motion controls, mobile navigation, and horizontal overflow at 390px and 320px viewports. These are emulated viewport checks, not a physical low-end Android benchmark.
 
 ## Assets and reference use
 
 - `dist/assets/brand-original.jpg`: original logo embedded in the user-supplied challenge PDF. Brand rights remain with the owner.
 - `dist/vendor/three*.js`: Three.js 0.184.0, MIT; license included.
 - `dist/vendor/anime.esm.min.js`: Anime.js 4.5.0 from the supplied folder, MIT; license included.
-- DM Sans and Space Grotesk: served by Google Fonts, with sans-serif fallbacks.
+- Bricolage Grotesque and Manrope: self-hosted Latin variable WOFF2 files, downloaded from Google Fonts; SIL Open Font License texts included.
+- `dist/assets/workshop.webp`: original AI-generated editorial illustration, made with the built-in image-generation tool. It is not a photograph of an actual Cre8TechIN event or evidence of student participation.
 - All scene geometry, project artifact styling, and code-screen artwork are authored for this project.
 - Local `ui-ux-pro-max-skill` informed accessibility and responsive interaction; `awesome-design-md` informed restrained dark surfaces and type hierarchy; `saeed-kolivand-portfolio` informed the one-canvas narrative and fallback strategy. No portfolio code or art is copied. Ponytail guided the minimal dependency approach.
+- The requested `Leonxlnx/taste-skill` package is installed in `.agents/skills/`, with provenance in `skills-lock.json`. Its redesign and frontend design guidance informed the revised palette, typography, section rhythm, and gallery. Existing functionality and the vanilla stack are preserved.
 
 ## Challenges and next improvements
 
 The main challenge is keeping a cinematic canvas synchronized with readable content across very different viewport proportions. The implementation keeps chapter selection separate from rendering and puts content first on mobile. Time-based idle movement intentionally complements the scroll-controlled transitions; it is not a frame-identical scrubbed film.
 
-Before a broad public launch: profile on physical low-end Android hardware, replace concept projects with approved real student case studies, and confirm up-to-date program and community data. Self-hosting the fonts would remove the remaining font-provider request. A real application form or credential verification system would require an authorized backend.
+Before a broad public launch: profile on physical low-end Android hardware, replace concept projects with approved real student case studies, and confirm up-to-date program and community data. A real application form or credential verification system would require an authorized backend.
+
+### Workshop image prompt
+
+Created with the built-in image-generation tool, then encoded as WebP for delivery:
+
+> Create one wide 3:2 cinematic editorial photograph-style illustration for an Indian student builder collective's website, NO TEXT, NO LOGOS. A candid over-the-shoulder crop of three young adult Indian university students collaboratively developing a physical electronics prototype at a late-night creative studio table. Focus on hands, open laptops at angles with abstract non-legible code, a small circuit board, notebooks and desk lamp, faces only partially visible, authentic concentration not posing or looking at camera. Warm amber tungsten practical light from left and soft neutral laptop illumination, charcoal shadows, almost monochrome with restrained gold highlights, tactile film grain, slightly imperfect documentary photography composition. Dark architectural interior, generous shadow negative space on right. High-end independent design publication aesthetic, 35mm lens, no neon, no purple, no sci-fi holograms, no stock-corporate smiles. This is an illustrative scene not evidence of an actual event.
 
 ## Deploy
 
