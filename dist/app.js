@@ -321,9 +321,10 @@ function scrollAnimate(el, frames, range = 0.55) {
   animation.pause();
   scrollTracks.push({ el, animation, range, top: 0 });
 }
-document.querySelectorAll(".scene:not(.hero) h2,.scene:not(.hero) .section-copy,.old-loop > span,.manifesto-words > span,.feedback-flow > span,.program-tabs > button,.project-card,.proof-list > span,.stats > div,.join-button").forEach((el, i) => {
+document.querySelectorAll(".scene:not(.hero) h2,.scene:not(.hero) .section-copy,.old-loop > span,.manifesto-words > span,.feedback-flow > span,.program-tabs > button,.project-card,.proof-list > span,.stats > div").forEach((el, i) => {
   scrollAnimate(el, [{ opacity: 0.12, translate: "0 32px" }, { opacity: 1, translate: "0 0" }], 0.22 + (i % 3) * 0.025);
 });
+scrollAnimate(document.querySelector(".join-button"), [{ opacity: 0.4, scale: 0.97 }, { opacity: 1, scale: 1 }], 0.25);
 scrollAnimate(document.querySelector(".discipline-strip"), [{ translate: "16% 0" }, { translate: "-10% 0" }], 1.5);
 scrollAnimate(document.querySelector(".community-photo"), [{ scale: 1.18, translate: "0 -3%" }, { scale: 1, translate: "0 3%" }], 1.7);
 scrollAnimate(document.querySelector(".question-line"), [{ scale: "0 1" }, { scale: "1 1" }], 0.55);
