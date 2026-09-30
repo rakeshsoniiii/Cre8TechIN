@@ -10,6 +10,7 @@ let dirty = true,
 let heroArtCenter = 700;
 let joinArtCenter = 0;
 const scrollTracks = [];
+const counterTracks = [];
 const clamp = (value) => Math.max(0, Math.min(1, value));
 let scrollFrame = 0;
 function measure() {
@@ -19,7 +20,7 @@ function measure() {
   const join = document.querySelector(".join");
   const joinNote = document.querySelector(".join-note");
   joinArtCenter = join.offsetTop + joinNote.offsetTop + joinNote.offsetHeight + 185;
-  scrollTracks.forEach((track) => {
+  [...scrollTracks, ...counterTracks].forEach((track) => {
     let top = 0;
     for (let node = track.el; node; node = node.offsetParent) top += node.offsetTop;
     track.top = top;
@@ -34,9 +35,14 @@ function updateScroll() {
   );
   document.querySelector(".reading-progress").style.transform =
     `scaleX(${scrollY / Math.max(1, document.documentElement.scrollHeight - innerHeight)})`;
-  document.querySelector("#chapter-number").textContent = String(
-    active + 1,
-  ).padStart(2, "0");
+  const chapterNumber = document.querySelector("#chapter-number");
+  const chapter = String(active + 1).padStart(2, "0");
+  if (chapterNumber.textContent !== chapter) {
+    chapterNumber.textContent = chapter;
+    if (!paused) animate("#chapter-number,#chapter-label", {
+      opacity: [0.25, 1], translateY: [6, 0], duration: 350, ease: "outCubic"
+    });
+  }
   document.querySelector("#chapter-label").textContent =
     sections[active].dataset.chapter;
   const navSection = active >= 8 ? "projects" : active >= 7 ? "programs" : active >= 5 ? "mentors" : "story";
@@ -51,6 +57,10 @@ function updateScroll() {
   scrollTracks.forEach((track) => {
     const progress = paused ? 1 : clamp((scrollY + innerHeight * 0.94 - track.top) / (innerHeight * track.range));
     track.animation.currentTime = progress * 1000;
+  });
+  counterTracks.forEach((track) => {
+    const progress = paused ? 1 : clamp((scrollY + innerHeight * 0.87 - track.top) / (innerHeight * 0.3));
+    track.el.textContent = Math.round(track.total * (1 - (1 - progress) ** 3));
   });
   dirty = true;
 }
@@ -79,6 +89,10 @@ function syncMotion() {
   motionButton.firstElementChild.textContent = paused ? "▷" : "Ⅱ";
   motionButton.title = paused ? "Enable animations" : "Pause animations";
   document.documentElement.classList.toggle("motion-paused", paused);
+  document.querySelectorAll(".magnetic").forEach((el) => {
+    el.style.removeProperty("--magnetic-x");
+    el.style.removeProperty("--magnetic-y");
+  });
   updateScroll();
   dirty = true;
 }
@@ -118,7 +132,7 @@ document.addEventListener("keydown", (e) => {
   }
 });
 if (!paused)
-  animate(".hero-copy > *", {
+  animate(".hero-copy h1 > span,.hero-description,.hero-copy .button,.hero-note,.hero-topline,.orbital-label,.object-caption,.hero-bottom", {
     opacity: [0, 1],
     translateY: [25, 0],
     delay: stagger(100),
@@ -266,6 +280,9 @@ document.querySelectorAll("[data-project]").forEach((button) =>
     );
     dialog.showModal();
     document.body.classList.add("dialog-open");
+    if (!paused) animate("#project-dialog > :not(.dialog-close)", {
+      opacity: [0, 1], translateY: [12, 0], delay: stagger(35), duration: 500, ease: "outCubic"
+    });
   }),
 );
 document
@@ -319,6 +336,7 @@ card.addEventListener("pointerleave", () => (card.style.transform = ""));
 function scrollAnimate(el, frames, range = 0.55) {
   const animation = el.animate(frames, { duration: 1000, fill: "both", easing: "linear" });
   animation.pause();
+  el.dataset.scrollMotion = "true";
   scrollTracks.push({ el, animation, range, top: 0 });
 }
 document.querySelectorAll(".scene:not(.hero) h2,.scene:not(.hero) .section-copy,.old-loop > span,.manifesto-words > span,.feedback-flow > span,.program-tabs > button,.project-card,.proof-list > span,.stats > div").forEach((el, i) => {
@@ -333,6 +351,36 @@ scrollAnimate(document.querySelector(".proof-art"), [{ rotate: "-18deg", scale: 
 scrollAnimate(document.querySelector(".hype h2"), [{ scale: 0.85, opacity: 0.15 }, { scale: 1, opacity: 1 }], 0.85);
 document.querySelectorAll(".artifact-cube,.shield-object,.study-object").forEach((el) => {
   scrollAnimate(el, [{ rotate: "0 1 0 -28deg", scale: 0.85 }, { rotate: "0 1 0 22deg", scale: 1 }], 1.1);
+});
+// Reveal remaining copy and controls without stacking motion on their children.
+document.querySelectorAll(".scene:not(.hero) h3,.scene:not(.hero) p,.scene:not(.hero) a,.scene:not(.hero) label,.scene:not(.hero) select,.scene:not(.hero) .name-input,.scene:not(.hero) .eyebrow,.inline-points,.community-roles,.project-tags,.join-note,.join footer,.network-note,.build-caption").forEach((el) => {
+  if (el.closest("[data-scroll-motion]")) return;
+  const frames = el.matches("a,button,select")
+    ? [{ opacity: 0.35, scale: 0.97 }, { opacity: 1, scale: 1 }]
+    : [{ opacity: 0.18, translate: "0 12px" }, { opacity: 1, translate: "0 0" }];
+  scrollAnimate(el, frames, 0.18);
+});
+document.querySelectorAll("[data-count]").forEach((el) => {
+  counterTracks.push({ el, total: Number(el.dataset.count), top: 0 });
+});
+// A small magnetic pull is reserved for mouse users; touch targets stay still.
+document.querySelectorAll(".button,.nav-join,.header nav a,.text-link,.hype-arrow,.motion-toggle,.dialog-close,.menu-toggle").forEach((el) => {
+  el.classList.add("magnetic");
+  const reset = () => {
+    el.style.setProperty("--magnetic-x", "0px");
+    el.style.setProperty("--magnetic-y", "0px");
+  };
+  el.addEventListener("pointermove", (event) => {
+    if (paused || event.pointerType !== "mouse" || innerWidth <= 760) return;
+    const rect = el.getBoundingClientRect();
+    const x = Math.max(-5, Math.min(5, (event.clientX - rect.left - rect.width / 2) * 0.1));
+    const y = Math.max(-4, Math.min(4, (event.clientY - rect.top - rect.height / 2) * 0.1));
+    el.style.setProperty("--magnetic-x", `${x}px`);
+    el.style.setProperty("--magnetic-y", `${y}px`);
+  });
+  el.addEventListener("pointerleave", reset);
+  el.addEventListener("pointerdown", reset);
+  el.addEventListener("blur", reset);
 });
 measure();
 
@@ -763,7 +811,8 @@ if (renderer) {
     if (mobile && active === 13)
       visualY = (0.5 - (joinArtCenter - scrollY) / innerHeight) *
         (2 * 11 * Math.tan((21 * Math.PI) / 180));
-    const visualX = mobile ? 0 : tx;
+    const desktopFit = Math.min(1, camera.aspect / 1.45);
+    const visualX = mobile ? 0 : tx * desktopFit;
     const size = mobile
       ? active === 13
         ? 0.62
@@ -774,7 +823,7 @@ if (renderer) {
             : active === 4
               ? 0.7
               : 0.8
-      : scale;
+      : scale * desktopFit;
     for (const [name, group] of Object.entries(groups)) {
       const target = name === type ? Math.max(0.001, size * presence) : 0.001;
       group.scale.lerp(new THREE.Vector3(target, target, target), blend);

@@ -39,9 +39,10 @@ The original gold Cre8TechIN crest is extracted intact from the supplied PDF and
 
 - **HTML, CSS, JavaScript:** semantic content stays in the document, separate from the decorative canvas. No frontend framework, backend, or build pipeline is needed.
 - **Three.js 0.184.0:** one fixed WebGL renderer, one camera, and four chapter-exclusive scene groups. Procedural geometry avoids model downloads and keeps assets small.
-- **Anime.js 4.5.0:** bundled from the supplied `anime/` reference, used for the initial entrance and program tab transitions.
+- **Anime.js 4.5.0:** bundled from the supplied `anime/` reference, used for staggered hero copy, chapter indicators, dialog content, and program tab transitions.
 - **Scroll choreography:** native Web Animations are paused and scrubbed from cached layout positions. Text, manifesto lines, project cards, photo parallax, identity card, and proof art move with scroll in both directions. Reduced motion shows the complete content immediately. Each WebGL object appears in exactly one chapter: sculpture → entrance, laptop → build, network → mentors, doorway → join.
 - **Native scrolling:** no scroll hijacking. Cached section bounds determine the chapter, object placement, scale, and rotation. Frame-rate-independent interpolation softens group transitions. Pointer movement adds a small secondary tilt.
+- **Tactile controls:** bounded magnetic motion on mouse-only desktop controls, arrow movement, a restrained gold sheen, and press feedback. Touch targets stay stationary and are at least 44 px for primary mobile controls. Remaining copy and controls have scroll reveals; published numeric totals count up with scrolling.
 - **CSS 3D:** project artifacts and the two-sided ID use perspective, transforms, and backface culling.
 - **Native dialog:** Escape, modal focus containment, accessible labels, backdrop dismissal, and focus restoration.
 
