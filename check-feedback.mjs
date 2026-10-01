@@ -14,11 +14,14 @@ runInNewContext(source.slice(source.indexOf('const controlSelector ='), source.i
   document: { ...events, querySelectorAll: () => [] }, window: events, Element,
   setTimeout: fn => { timer = fn; return 1; }, clearTimeout: () => { timer = null; }
 });
-const copy = new Element();
+const copy = new Element(true);
+const plainText = new Element();
 const button = new Element(true);
 const pointer = { target: copy, pointerType: 'touch', isPrimary: true, button: 0, pointerId: 1, clientX: 0, clientY: 0 };
+listeners.pointerdown({ ...pointer, target: plainText });
+assert(!plainText.classes.has('feedback-pressed'), 'Plain copy does not pretend to be a control');
 listeners.pointerdown(pointer);
-assert(copy.classes.has('feedback-pressed'), 'Touch highlights copy');
+assert(copy.classes.has('feedback-pressed'), 'Touch highlights controls');
 listeners.pointermove({ ...pointer, clientY: 15 });
 assert(!copy.classes.has('feedback-pressed'), 'Dragging cancels the highlight');
 listeners.pointerdown({ ...pointer, target: button });
@@ -29,7 +32,7 @@ listeners.pointerdown(pointer);
 listeners.pointercancel();
 assert(!copy.classes.has('feedback-pressed'), 'Cancelled touch clears feedback');
 listeners.pointerover({ ...pointer, pointerType: 'mouse' });
-assert(copy.classes.has('feedback-hover'), 'Mouse highlights copy');
+assert(copy.classes.has('feedback-hover'), 'Mouse highlights controls');
 listeners.scroll();
 assert(!copy.classes.has('feedback-hover'), 'Scrolling clears stale hover');
 console.log('PASS: touch, drag cancellation, release, pointer cancellation, hover, and scroll cleanup.');

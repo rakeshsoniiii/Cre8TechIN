@@ -1,6 +1,6 @@
 # Cre8TechIN — For the ones who build
 
-A complete 14-chapter, scroll-driven experience made for the **Cre8TechIN 3D Immersive Web Experience Challenge**. The story moves from curiosity to creation, belonging, proof, and a first step into a real program.
+A complete 12-chapter, scroll-driven experience made for the **Cre8TechIN 3D Immersive Web Experience Challenge**. The story moves from curiosity to creation, belonging, proof, and a first step into a real program.
 
 ## Run locally
 
@@ -14,32 +14,30 @@ Open http://127.0.0.1:4173. Run `npm run check` for the release checks.
 
 ## Concept and visual direction
 
-**From spark to something real.** A machined, three-dimensional “8” borrows its angular geometry and gold from the original crest. Its layered construction separates as you scroll into the story. The world then becomes a laptop, a mentor network, and a doorway into your next chapter. Charcoal, warm ivory, one gold accent, and large Bricolage Grotesque typography give the experience an editorial identity. Projects use a staggered gallery rather than three identical cards.
+**From spark to something real.** A machined, three-dimensional “8” borrows its angular geometry and gold from the original crest. Its layered construction separates as you scroll into the story. The world then becomes a laptop, a mentor network, and a doorway into your next chapter. Charcoal, warm ivory, one gold accent, and large Bricolage Grotesque typography give the experience an editorial identity. Projects use a compact three-column desktop gallery that stacks on mobile.
 
 The original gold Cre8TechIN crest is extracted intact from the supplied PDF and used in navigation, the brand reveal, the sample student identity, and the footer. It has not been replaced by an invented logo.
 
 ## Story
 
-1. **Entrance:** a real WebGL orbital sculpture, cursor response, and invitation to enter.
-2. **Enter the world:** a layered idea studio with Web, AI, and Security directions that change the project prompt.
-3. **The problem:** a tutorial-to-project workbench toggles between consuming a tutorial and planning one useful feature.
-4. **The reveal:** BUILD. LEARN. LAUNCH. alongside keyboard-accessible process tabs and a scroll-driven visual.
-5. **Build:** a modeled laptop, instanced keyboard, and original code-screen texture.
-6. **Learn:** a mentor hub and connected knowledge network.
-7. **Community:** an original workshop illustration makes the story about people, not only objects.
-8. **Possibilities:** keyboard-accessible program tabs and a real program destination.
-9. **Projects:** three interactive CSS 3D project concepts with accessible detail dialogs.
-10. **Identity:** a personalized, tilting, reversible sample student ID.
-11. **Proof:** projects, code review, and earned evidence of work.
-12. **Growth:** animated figures grounded in the current Cre8TechIN homepage.
-13. **Your turn:** an energetic transition followed by a direct invitation.
-14. **The portal:** a single extruded architectural doorway and a link to the real programs page.
+1. **Entrance:** clear offer, a refined WebGL sculpture, and a direct program CTA.
+2. **Programs:** track tabs, published plan prices, format, outcomes, and enrollment guidance.
+3. **Idea studio:** choose a starting question across Web, AI, and Security.
+4. **Process:** keyboard-accessible Build, Learn, Launch tabs.
+5. **Build:** a single scroll-controlled laptop.
+6. **Mentors:** feedback flow and attributed official mentor information.
+7. **Community:** a clearly labeled workshop illustration.
+8. **Projects:** three explicitly illustrative project briefs.
+9. **Identity:** a personalized sample ID, stored only in page memory.
+10. **Proof:** portfolio and credential outcomes.
+11. **Community figures:** source-attributed counts.
+12. **Next step:** official enrollment destination, FAQs, and useful footer navigation.
 
 ## Implementation
 
 - **HTML, CSS, JavaScript:** semantic content stays in the document, separate from the decorative canvas. No frontend framework, backend, or build pipeline is needed.
 - **Three.js 0.184.0:** one fixed WebGL renderer, one camera, and four chapter-exclusive scene groups. Procedural geometry avoids model downloads and keeps assets small.
-- **GSAP 3.15.0 + ScrollTrigger:** bundled locally from npm. Official GSAP skills are installed in `.agents/skills/gsap-*`. The idea layers, workbench files, and process art use independent, scrubbed timelines. `gsap.matchMedia()` reverts those animations for the pause control, reduced-motion preference, and viewport changes. Interactive content refreshes trigger positions after layout changes.
+- **GSAP 3.15.0 + ScrollTrigger:** bundled locally from npm. Official GSAP skills are installed in `.agents/skills/gsap-*`. The idea layers and process art use independent, scrubbed timelines. `gsap.matchMedia()` reverts those animations for the pause control, reduced-motion preference, and viewport changes. Interactive content refreshes trigger positions after layout changes.
 - **Anime.js 4.5.0:** bundled from the supplied `anime/` reference, used for staggered hero copy, chapter indicators, dialog content, and program tab transitions.
 - **Scroll choreography:** native Web Animations are paused and scrubbed from cached layout positions. Text, manifesto lines, project cards, photo parallax, identity card, and proof art move with scroll in both directions. Reduced motion shows the complete content immediately. Each WebGL object appears in exactly one chapter: sculpture → entrance, laptop → build, network → mentors, doorway → join.
 - **Native scrolling:** no scroll hijacking. Cached section bounds determine the chapter, object placement, scale, and rotation. Frame-rate-independent interpolation softens group transitions. Pointer movement adds a small secondary tilt.
@@ -70,9 +68,9 @@ The main code is in `dist/app.js`, structure in `dist/index.html`, and styling i
 
 ## Verification
 
-`npm run check` verifies JavaScript syntax, all 14 chapters, unique IDs, internal anchor destinations, required local assets, and the real join destination.
+`npm run check` verifies JavaScript syntax, all 12 chapters, unique IDs, internal anchor destinations, required local assets, and the real join destination.
 
-Browser checks also cover idea selection, the workbench toggle, keyboard process navigation, and independent program tabs. Browser checks cover the desktop hero, WebGL initialization, program selection, project details, ID personalization and flipping, motion controls, mobile navigation, and horizontal overflow at 390px and 320px viewports. These are emulated viewport checks, not a physical low-end Android benchmark.
+Browser checks also cover idea selection, expandable FAQs, keyboard process navigation, and independent program tabs. Browser checks cover the desktop hero, WebGL initialization, program selection, project details, ID personalization and flipping, motion controls, mobile navigation, and horizontal overflow at 390px and 320px viewports. These are emulated viewport checks, not a physical low-end Android benchmark.
 
 ## Assets and reference use
 
@@ -106,4 +104,10 @@ The GitHub repository is https://github.com/rakeshsoniiii/Cre8TechIN.
 
 ### Hover and touch feedback
 
-Headings, body copy, labels, and numbers receive a restrained gold glow on hover or touch. All native controls receive press feedback and visible keyboard focus. Text remains selectable, and touch feedback cancels after a 10px movement or native scrolling; no gestures are intercepted. Feedback avoids transform properties owned by the scroll animations and respects reduced motion.
+Feedback is limited to actual controls: buttons, links, inputs, and disclosure summaries. Body copy remains stable and selectable. Scroll animation never reduces reading opacity. Dragging more than 10px or native scrolling cancels press feedback. Keyboard focus and reduced-motion preferences remain supported.
+
+### Design audit revision — 1 October 2026
+
+Programs moved immediately after the hero; the repeated question and hype chapters were removed. Typography, section spacing, mobile labels, gallery layout, FAQ and footer were revised. The sculpture has wider, smoother bevels. Real content links and the 12-chapter sequence are checked by `node check.mjs`; interaction cleanup is checked by `node check-feedback.mjs`.
+
+Published Standard ₹1,499 / Premium ₹4,999 plans, four-week format, and Carel Simon's listed mentor role are attributed to https://cre8techin.in/ (checked 1 October 2026). These are publisher claims, not independent verification. Cohort dates, weekly hours, approved student demo URLs, working mentor profile links, contact details, social profiles and policy URLs remain unavailable in the verified sources. No such details or testimonials have been invented; the UI explains what to confirm before enrollment.

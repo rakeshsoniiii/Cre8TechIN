@@ -48,9 +48,10 @@ function updateScroll() {
   }
   document.querySelector("#chapter-label").textContent =
     sections[active].dataset.chapter;
-  const navSection = active >= 8 ? "projects" : active >= 7 ? "programs" : active >= 5 ? "mentors" : "story";
+  const currentId = sections[active].id;
+  const navSection = ["programs", "projects", "mentors"].includes(currentId) ? currentId : ["story", "about", "build"].includes(currentId) ? "story" : null;
   document.querySelectorAll(".header nav a").forEach((a) => {
-    const selected = a.hash === `#${navSection}` && active < 13;
+    const selected = a.hash === `#${navSection}`;
     a.classList.toggle("active", selected);
     if (selected) a.setAttribute("aria-current", "location");
     else a.removeAttribute("aria-current");
@@ -351,19 +352,6 @@ document.querySelectorAll("[data-idea]").forEach((button) => button.addEventList
   measure();
   ScrollTrigger.refresh();
 }));
-document.querySelector("#workbench-toggle").addEventListener("click", (event) => {
-  const button = event.currentTarget;
-  const building = button.getAttribute("aria-pressed") !== "true";
-  button.setAttribute("aria-pressed", String(building));
-  document.querySelector(".build-workbench").dataset.mode = building ? "build" : "watch";
-  document.querySelector("#workbench-label").textContent = building ? "YOUR FIRST PROJECT PLAN" : "THE NEXT MOVE IS YOURS";
-  document.querySelector("#workbench-title").textContent = building ? "One useful feature. One first commit." : "Close one tab. Open a possibility.";
-  document.querySelector("#workbench-description").textContent = building ? "Create a page, connect one interaction, and explain what you made in a README. That is a place to start." : "Take the thing you just learned and give it a job to do.";
-  button.firstChild.textContent = building ? "Back to the starting point " : "Turn it into a project ";
-  if (!paused) gsap.fromTo(".workbench-files > div", { x: -10, autoAlpha: 0.3 }, { x: 0, autoAlpha: 1, stagger: 0.08, duration: 0.5, ease: "power3.out", overwrite: true });
-  measure();
-  ScrollTrigger.refresh();
-});
 const processSteps = {
   build: ["↗", "START SMALL. START YOURS.", "Make the first version.", "Choose one problem. Write the first line. Build something you can put in front of another person."],
   learn: ["↔", "FEEDBACK IS PART OF THE WORK.", "Find a better way.", "Walk someone through your project. Ask a useful question. Take the feedback and improve one thing."],
@@ -394,6 +382,7 @@ stepTabs.forEach((button, i) => {
 // Paused Web Animations are scrubbed by native scroll, including reverse scrolling.
 // Individual translate/rotate properties preserve the card's hover and flip transforms.
 function scrollAnimate(el, frames, range = 0.55) {
+  frames = frames.map(({ opacity, ...frame }) => frame);
   const animation = el.animate(frames, { duration: 1000, fill: "both", easing: "linear" });
   animation.pause();
   el.dataset.scrollMotion = "true";
@@ -405,10 +394,8 @@ document.querySelectorAll(".scene:not(.hero) h2,.scene:not(.hero) .section-copy,
 scrollAnimate(document.querySelector(".join-button"), [{ opacity: 0.4, scale: 0.97 }, { opacity: 1, scale: 1 }], 0.25);
 scrollAnimate(document.querySelector(".discipline-strip"), [{ translate: "16% 0" }, { translate: "-10% 0" }], 1.5);
 scrollAnimate(document.querySelector(".community-photo"), [{ scale: 1.18, translate: "0 -3%" }, { scale: 1, translate: "0 3%" }], 1.7);
-scrollAnimate(document.querySelector(".question-line"), [{ scale: "0 1" }, { scale: "1 1" }], 0.55);
 scrollAnimate(document.querySelector(".id-stage"), [{ rotate: "-8deg", translate: "0 70px" }, { rotate: "0deg", translate: "0 0" }], 0.9);
 scrollAnimate(document.querySelector(".proof-art"), [{ rotate: "-18deg", scale: 0.8 }, { rotate: "0deg", scale: 1 }], 1);
-scrollAnimate(document.querySelector(".hype h2"), [{ scale: 0.85, opacity: 0.15 }, { scale: 1, opacity: 1 }], 0.85);
 document.querySelectorAll(".artifact-cube,.shield-object,.study-object").forEach((el) => {
   scrollAnimate(el, [{ rotate: "0 1 0 -28deg", scale: 0.85 }, { rotate: "0 1 0 22deg", scale: 1 }], 1.1);
 });
@@ -442,24 +429,13 @@ document.querySelectorAll(".button,.nav-join,.header nav a,.text-link,.hype-arro
   el.addEventListener("pointerdown", reset);
   el.addEventListener("blur", reset);
 });
-// One delegated feedback layer also covers copy updated by the chapter controls.
-// Copy remains selectable text; only real controls receive keyboard focus.
+// Delegate feedback to real controls; body copy stays stable and selectable.
 const controlSelector = 'a,button,input,select,textarea,summary,[role="button"]';
-document.querySelectorAll('h1,h2,h3,h4,p,span,b,strong,em,small,label,li,figcaption,dt,dd').forEach((el) => {
-  if (el.closest(`${controlSelector},[aria-hidden="true"]`)) return;
-  if ([...el.childNodes].some((node) => node.nodeType === Node.TEXT_NODE && node.textContent.trim())) el.classList.add('responsive-copy');
-});
 let hoveredFeedback = null;
 let pressedFeedback = null;
 let releaseFeedback;
 function feedbackTarget(target) {
-  if (!(target instanceof Element)) return null;
-  const control = target.closest(controlSelector);
-  if (control) return control;
-  const copy = target.closest('.responsive-copy,h1,h2,h3,h4,p,li,figcaption,dt,dd');
-  if (!copy || copy.closest('[aria-hidden="true"]')) return null;
-  copy.classList.add('responsive-copy');
-  return copy;
+  return target instanceof Element ? target.closest(controlSelector) : null;
 }
 function clearPress() {
   clearTimeout(releaseFeedback);
@@ -509,10 +485,10 @@ chapterMotion.add({ desktop: "(min-width: 761px)", mobile: "(max-width: 760px)",
   idea.fromTo(".sheet-back", { y: distance, rotationZ: -28 }, { y: 0, rotationZ: -18, duration: 1 }, 0)
     .fromTo(".sheet-front", { y: distance * 1.6, rotationZ: 8 }, { y: -5, rotationZ: -8, duration: 1 }, 0)
     .fromTo(".drawing-grid", { autoAlpha: 0.1 }, { autoAlpha: 1, duration: 1 }, 0);
-  gsap.fromTo(".workbench-files", { y: 25, autoAlpha: 0.25 }, { y: 0, autoAlpha: 1, ease: "none", scrollTrigger: { trigger: ".build-workbench", start: "clamp(top 75%)", end: "clamp(center 50%)", scrub: 0.35 } });
   gsap.fromTo(".sequence-art", { rotationY: -35, scale: 0.8 }, { rotationY: 0, scale: 1, ease: "none", scrollTrigger: { trigger: ".launch-sequence", start: "clamp(top 85%)", end: "clamp(bottom 65%)", scrub: 0.4 } });
 });
 document.fonts.ready.then(() => ScrollTrigger.refresh());
+document.querySelectorAll("details").forEach(el => el.addEventListener("toggle", () => { measure(); ScrollTrigger.refresh(); }));
 
 let renderer;
 try {
@@ -584,7 +560,7 @@ if (renderer) {
   const metal = new THREE.MeshPhysicalMaterial({
     color: 0xaaa59b,
     metalness: 1,
-    roughness: 0.23,
+    roughness: 0.32,
     clearcoat: 0.55,
     envMapIntensity: 1.4,
   });
@@ -634,9 +610,9 @@ if (renderer) {
   const sculptureGeo = new THREE.ExtrudeGeometry(shape, {
     depth: 0.32,
     bevelEnabled: true,
-    bevelThickness: 0.045,
-    bevelSize: 0.045,
-    bevelSegments: 3,
+    bevelThickness: 0.09,
+    bevelSize: 0.09,
+    bevelSegments: 8,
     steps: 1,
   });
   sculptureGeo.center();
@@ -929,28 +905,28 @@ if (renderer) {
     const [tx, ty, scale] = placements[type] || [0, 0, 0];
     const b = bounds[active];
     const travel = paused ? 0.5 : clamp((scrollY + innerHeight * 0.45 - b.top) / b.height);
-    const entrance = active === 0 || paused ? 1 : THREE.MathUtils.smoothstep(travel, 0, 0.15);
-    const exit = active === 13 || paused ? 1 : 1 - THREE.MathUtils.smoothstep(travel, 0.72, 1);
+    const entrance = sections[active].id === "entrance" || paused ? 1 : THREE.MathUtils.smoothstep(travel, 0, 0.15);
+    const exit = sections[active].id === "join" || paused ? 1 : 1 - THREE.MathUtils.smoothstep(travel, 0.72, 1);
     const presence = entrance * exit;
     const blend = paused ? 1 : 1 - Math.exp(-dt * 9);
-    let visualY = mobile ? (active === 13 ? -2.3 : -2.35) : ty;
-    if (mobile && active === 0)
+    let visualY = mobile ? (sections[active].id === "join" ? -2.3 : -2.35) : ty;
+    if (mobile && sections[active].id === "entrance")
       visualY =
         (0.5 - (heroArtCenter - scrollY) / innerHeight) *
         (2 * 11 * Math.tan((21 * Math.PI) / 180));
-    if (mobile && active === 13)
+    if (mobile && sections[active].id === "join")
       visualY = (0.5 - (joinArtCenter - scrollY) / innerHeight) *
         (2 * 11 * Math.tan((21 * Math.PI) / 180));
     const desktopFit = Math.min(1, camera.aspect / 1.45);
     const visualX = mobile ? 0 : tx * desktopFit;
     const size = mobile
-      ? active === 13
+      ? sections[active].id === "join"
         ? 0.62
-        : active === 12
+        : sections[active].id === "your-turn"
           ? 0.65
-          : active === 6
+          : sections[active].id === "community"
             ? 0.68
-            : active === 4
+            : sections[active].id === "build"
               ? 0.7
               : 0.8
       : scale * desktopFit;
@@ -998,8 +974,8 @@ if (renderer) {
     halo.rotation.set(1.1, 0.3 + travel * 2, 0.2);
     portal.rotation.y = -0.45 + travel * 0.65 + tiltX * 0.3;
     portal.rotation.z = 0;
-    portal.position.z = active === 13 ? travel * 0.3 : 0;
-    stars.visible = active === 0;
+    portal.position.z = sections[active].id === "join" ? travel * 0.3 : 0;
+    stars.visible = sections[active].id === "entrance";
     stars.rotation.z = travel * 0.04;
     stars.material.opacity = type === "quiet" ? 0.08 : 0.28;
     satellites.forEach((m, i) => {

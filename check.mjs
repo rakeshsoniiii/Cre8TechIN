@@ -24,8 +24,8 @@ for (const path of [
 }
 assert.equal(
   [...html.matchAll(/data-chapter=/g)].length,
-  14,
-  "All 14 story chapters must be present",
+  12,
+  "All 12 story chapters must be present",
 );
 const worlds = [...html.matchAll(/data-world="([^"]+)"/g)].map((match) => match[1]);
 for (const world of ["orbit", "laptop", "network", "portal"]) {
@@ -39,5 +39,5 @@ assert(
 execFileSync(process.execPath, ["--check", "dist/app.js"]);
 execFileSync(process.execPath, ["--check", "server.mjs"]);
 console.log(
-  "PASS: 14 chapters, unique IDs, all navigation targets, local assets, real join destination, and JavaScript syntax.",
+  "PASS: 12 chapters, unique IDs, all navigation targets, local assets, real join destination, and JavaScript syntax.",
 );
