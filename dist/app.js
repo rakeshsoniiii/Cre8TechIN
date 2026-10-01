@@ -442,6 +442,62 @@ document.querySelectorAll(".button,.nav-join,.header nav a,.text-link,.hype-arro
   el.addEventListener("pointerdown", reset);
   el.addEventListener("blur", reset);
 });
+// One delegated feedback layer also covers copy updated by the chapter controls.
+// Copy remains selectable text; only real controls receive keyboard focus.
+const controlSelector = 'a,button,input,select,textarea,summary,[role="button"]';
+document.querySelectorAll('h1,h2,h3,h4,p,span,b,strong,em,small,label,li,figcaption,dt,dd').forEach((el) => {
+  if (el.closest(`${controlSelector},[aria-hidden="true"]`)) return;
+  if ([...el.childNodes].some((node) => node.nodeType === Node.TEXT_NODE && node.textContent.trim())) el.classList.add('responsive-copy');
+});
+let hoveredFeedback = null;
+let pressedFeedback = null;
+let releaseFeedback;
+function feedbackTarget(target) {
+  if (!(target instanceof Element)) return null;
+  const control = target.closest(controlSelector);
+  if (control) return control;
+  const copy = target.closest('.responsive-copy,h1,h2,h3,h4,p,li,figcaption,dt,dd');
+  if (!copy || copy.closest('[aria-hidden="true"]')) return null;
+  copy.classList.add('responsive-copy');
+  return copy;
+}
+function clearPress() {
+  clearTimeout(releaseFeedback);
+  pressedFeedback?.el.classList.remove('feedback-pressed');
+  pressedFeedback = null;
+}
+function clearHover() {
+  hoveredFeedback?.classList.remove('feedback-hover');
+  hoveredFeedback = null;
+}
+document.addEventListener('pointerover', (event) => {
+  if (event.pointerType !== 'mouse') return;
+  const el = feedbackTarget(event.target);
+  if (el === hoveredFeedback) return;
+  clearHover();
+  hoveredFeedback = el;
+  el?.classList.add('feedback-hover');
+});
+document.addEventListener('pointerout', (event) => {
+  if (!event.relatedTarget) clearHover();
+});
+document.addEventListener('pointerdown', (event) => {
+  clearPress();
+  if (!event.isPrimary || event.button !== 0) return;
+  const el = feedbackTarget(event.target);
+  if (!el || el.matches(':disabled')) return;
+  pressedFeedback = { el, id: event.pointerId, x: event.clientX, y: event.clientY };
+  el.classList.add('feedback-pressed');
+}, { passive: true });
+document.addEventListener('pointermove', (event) => {
+  if (pressedFeedback?.id === event.pointerId && Math.hypot(event.clientX - pressedFeedback.x, event.clientY - pressedFeedback.y) > 10) clearPress();
+}, { passive: true });
+document.addEventListener('pointerup', (event) => {
+  if (pressedFeedback?.id === event.pointerId) releaseFeedback = setTimeout(clearPress, 180);
+}, { passive: true });
+document.addEventListener('pointercancel', clearPress, { passive: true });
+window.addEventListener('scroll', () => { clearPress(); clearHover(); }, { passive: true });
+window.addEventListener('blur', () => { clearPress(); clearHover(); });
 measure();
 
 // GSAP owns only the new chapter visuals; existing text/hover transforms stay independent.

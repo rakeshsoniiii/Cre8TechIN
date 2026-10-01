@@ -103,3 +103,7 @@ Created with the built-in image-generation tool, then encoded as WebP for delive
 Upload `dist/` to any static host. `.openai/hosting.json` records the private Sites deployment identity. The repository does not contain deployment tokens or secrets.
 
 The GitHub repository is https://github.com/rakeshsoniiii/Cre8TechIN.
+
+### Hover and touch feedback
+
+Headings, body copy, labels, and numbers receive a restrained gold glow on hover or touch. All native controls receive press feedback and visible keyboard focus. Text remains selectable, and touch feedback cancels after a 10px movement or native scrolling; no gestures are intercepted. Feedback avoids transform properties owned by the scroll animations and respects reduced motion.

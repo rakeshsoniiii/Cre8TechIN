@@ -2993,3 +2993,24 @@ select:focus-visible { border-color: #d0b27a; }
 @media(max-width:760px) { .drawing-label { display:none; } }
 html.motion-paused { scroll-behavior:auto !important; }
 @media(prefers-reduced-motion:reduce) { html { scroll-behavior:auto !important; } }
+
+/* Tactile feedback is independent of the scroll animation's transforms. */
+.hero-copy { pointer-events:auto; }
+.responsive-copy { transition:text-shadow 220ms ease, filter 220ms ease; }
+.responsive-copy.feedback-hover,
+.responsive-copy.feedback-pressed { text-shadow:0 0 22px #d4b78060; filter:brightness(1.18); }
+.responsive-copy.feedback-pressed { text-shadow:0 0 14px #e1c78890; }
+:is(a,button,input,select,textarea,summary,[role="button"]).feedback-hover {
+  filter:brightness(1.13);
+}
+:is(a,button,input,select,textarea,summary,[role="button"]).feedback-pressed {
+  filter:brightness(1.22);
+  outline:1px solid #e6c98b99;
+  outline-offset:4px;
+}
+:is(a,button,input,select,textarea,summary,[role="button"]):focus-visible {
+  outline:2px solid #e6c98b;
+  outline-offset:5px;
+}
+html.motion-paused .responsive-copy { transition:none; }
+@media(prefers-reduced-motion:reduce) { .responsive-copy { transition:none; } }

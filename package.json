@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "node server.mjs",
     "start": "node server.mjs",
-    "check": "node check.mjs"
+    "check": "node check.mjs && node check-feedback.mjs"
   },
   "dependencies": {
     "gsap": "3.15.0"
