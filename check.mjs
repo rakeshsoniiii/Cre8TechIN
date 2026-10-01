@@ -17,6 +17,8 @@ for (const path of [
   "vendor/three.module.min.js",
   "vendor/three.core.min.js",
   "vendor/anime.esm.min.js",
+  "vendor/gsap.min.js",
+  "vendor/ScrollTrigger.min.js",
 ]) {
   await access(resolve("dist", path));
 }

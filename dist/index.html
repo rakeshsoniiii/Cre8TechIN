@@ -110,6 +110,8 @@
         data-world="quiet"
         data-chapter="A world of possibility"
       >
+        <div class="chapter-layout">
+        <div class="chapter-copy">
         <h2 class="display">
           That idea in<br />your head?<br /><em>It belongs here.</em>
         </h2>
@@ -117,6 +119,18 @@
           A little curiosity is all it takes. Step into a world where code meets
           creativity, and “what if” becomes “look what I made.”
         </p>
+        <a class="text-link" href="#projects">Find your first project <span>↗</span></a>
+        </div>
+        <div class="idea-studio" aria-label="Interactive idea studio">
+          <div class="studio-top"><span class="status-dot"></span> THE IDEA STUDIO <span>01 / EXPLORE</span></div>
+          <div class="idea-drawing" aria-hidden="true"><div class="drawing-grid"></div><div class="idea-sheet sheet-back"></div><div class="idea-sheet sheet-front"><span>WHAT IF…</span><b id="idea-symbol">↗</b><span>YOUR NEXT BUILD</span></div><span class="drawing-label">A LITTLE CURIOSITY.<br />A LOT OF POSSIBILITY.</span></div>
+          <div class="idea-options" role="group" aria-label="Choose an idea direction">
+            <button type="button" data-idea="web" aria-pressed="true">Web</button><button type="button" data-idea="ai" aria-pressed="false">AI</button><button type="button" data-idea="security" aria-pressed="false">Security</button>
+          </div>
+          <div class="idea-result" aria-live="polite"><span>YOUR STARTING QUESTION</span><h3 id="idea-title">What if your campus had one place for everything?</h3><p id="idea-description">Start with a useful campus hub. Bring events, resources, and people together.</p></div>
+          <div class="studio-bottom"><span>Pick a direction. Make it yours.</span><a href="#programs" aria-label="Explore programs for your idea">↗</a></div>
+        </div>
+        </div>
         <div class="discipline-strip" aria-label="Explore disciplines">
           <span>CODE</span><i>✳</i><span>AI</span><i>✳</i><span>DESIGN</span
           ><i>✳</i><span>CYBERSECURITY</span><i>✳</i><span>WEB</span><i>✳</i
@@ -129,6 +143,8 @@
         data-world="quiet"
         data-chapter="The real question"
       >
+        <div class="chapter-layout">
+        <div class="chapter-copy">
         <div class="old-loop">
           <span>You learn.</span><span>You watch tutorials.</span
           ><span>You collect certificates.</span>
@@ -136,6 +152,16 @@
         <p class="small-mono">THEN COMES THE QUESTION THAT MATTERS.</p>
         <h2>But what have you<br /><span>actually built?</span></h2>
         <div class="question-line"></div>
+        </div>
+        <div class="build-workbench" data-mode="watch">
+          <div class="workbench-top"><span>FROM CONSUMING TO CREATING</span><span class="workbench-light"></span></div>
+          <div class="watch-stage" aria-hidden="true"><span class="play-outline">▷</span><div class="video-line"></div><span class="watch-timestamp">ANOTHER TUTORIAL. ANOTHER TAB.</span></div>
+          <div class="workbench-files" aria-hidden="true"><div><span>01</span> index.html <b>+</b></div><div><span>02</span> your-idea.js <b>+</b></div><div><span>03</span> README.md <b>+</b></div></div>
+          <div class="workbench-copy" aria-live="polite"><span id="workbench-label">THE NEXT MOVE IS YOURS</span><h3 id="workbench-title">Close one tab.<br />Open a possibility.</h3><p id="workbench-description">Take the thing you just learned and give it a job to do.</p></div>
+          <button class="button primary" id="workbench-toggle" type="button" aria-pressed="false">Turn it into a project <span>↗</span></button>
+          <span class="workbench-note">An interactive example of the builder mindset.</span>
+        </div>
+        </div>
       </section>
       <section
         class="scene manifesto"
@@ -144,6 +170,8 @@
         data-chapter="A different way"
       >
         <p class="eyebrow">04 / MEET CRE8TECHIN</p>
+        <div class="chapter-layout">
+        <div class="chapter-copy">
         <div class="manifesto-words">
           <span>BUILD.</span><span>LEARN.</span
           ><span>LAUNCH<span class="lime">.</span></span>
@@ -160,6 +188,21 @@
             Less sitting on the sidelines.<br />More making something that
             matters.<br /><b>Welcome to your builder era.</b>
           </p>
+        </div>
+        </div>
+        <div class="launch-sequence">
+          <div class="sequence-top"><span>HOW AN IDEA BECOMES REAL</span><span>01 — 03</span></div>
+          <div class="sequence-steps" role="tablist" aria-label="The builder process" aria-orientation="vertical">
+            <button id="step-build" role="tab" aria-selected="true" aria-controls="sequence-panel" data-step="build"><span>01</span><b>Build</b><small>Make a first version</small><i>↗</i></button>
+            <button id="step-learn" role="tab" aria-selected="false" aria-controls="sequence-panel" tabindex="-1" data-step="learn"><span>02</span><b>Learn</b><small>Get a fresh perspective</small><i>↗</i></button>
+            <button id="step-launch" role="tab" aria-selected="false" aria-controls="sequence-panel" tabindex="-1" data-step="launch"><span>03</span><b>Launch</b><small>Put your work out there</small><i>↗</i></button>
+          </div>
+          <div id="sequence-panel" class="sequence-panel" role="tabpanel" aria-labelledby="step-build" tabindex="0">
+            <div class="sequence-art" aria-hidden="true"><span class="sequence-bracket">{</span><span id="sequence-mark">↗</span><span class="sequence-bracket">}</span></div>
+            <span id="sequence-kicker">START SMALL. START YOURS.</span><h3 id="sequence-title">Make the first version.</h3><p id="sequence-description">Choose one problem. Write the first line. Build something you can put in front of another person.</p>
+          </div>
+          <a class="text-link" href="#build">See the builder experience <span>↗</span></a>
+        </div>
         </div>
       </section>
       <section
@@ -599,6 +642,8 @@
         >Find a program <span>↗</span></a
       >
     </dialog>
+    <script src="vendor/gsap.min.js"></script>
+    <script src="vendor/ScrollTrigger.min.js"></script>
     <script type="module" src="app.js"></script>
   </body>
 </html>

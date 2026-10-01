@@ -21,9 +21,9 @@ The original gold Cre8TechIN crest is extracted intact from the supplied PDF and
 ## Story
 
 1. **Entrance:** a real WebGL orbital sculpture, cursor response, and invitation to enter.
-2. **Enter the world:** ideas and disciplines come into view.
-3. **The problem:** the visual world recedes for “what have you actually built?”
-4. **The reveal:** BUILD. LEARN. LAUNCH.
+2. **Enter the world:** a layered idea studio with Web, AI, and Security directions that change the project prompt.
+3. **The problem:** a tutorial-to-project workbench toggles between consuming a tutorial and planning one useful feature.
+4. **The reveal:** BUILD. LEARN. LAUNCH. alongside keyboard-accessible process tabs and a scroll-driven visual.
 5. **Build:** a modeled laptop, instanced keyboard, and original code-screen texture.
 6. **Learn:** a mentor hub and connected knowledge network.
 7. **Community:** an original workshop illustration makes the story about people, not only objects.
@@ -39,6 +39,7 @@ The original gold Cre8TechIN crest is extracted intact from the supplied PDF and
 
 - **HTML, CSS, JavaScript:** semantic content stays in the document, separate from the decorative canvas. No frontend framework, backend, or build pipeline is needed.
 - **Three.js 0.184.0:** one fixed WebGL renderer, one camera, and four chapter-exclusive scene groups. Procedural geometry avoids model downloads and keeps assets small.
+- **GSAP 3.15.0 + ScrollTrigger:** bundled locally from npm. Official GSAP skills are installed in `.agents/skills/gsap-*`. The idea layers, workbench files, and process art use independent, scrubbed timelines. `gsap.matchMedia()` reverts those animations for the pause control, reduced-motion preference, and viewport changes. Interactive content refreshes trigger positions after layout changes.
 - **Anime.js 4.5.0:** bundled from the supplied `anime/` reference, used for staggered hero copy, chapter indicators, dialog content, and program tab transitions.
 - **Scroll choreography:** native Web Animations are paused and scrubbed from cached layout positions. Text, manifesto lines, project cards, photo parallax, identity card, and proof art move with scroll in both directions. Reduced motion shows the complete content immediately. Each WebGL object appears in exactly one chapter: sculpture → entrance, laptop → build, network → mentors, doorway → join.
 - **Native scrolling:** no scroll hijacking. Cached section bounds determine the chapter, object placement, scale, and rotation. Frame-rate-independent interpolation softens group transitions. Pointer movement adds a small secondary tilt.
@@ -71,12 +72,13 @@ The main code is in `dist/app.js`, structure in `dist/index.html`, and styling i
 
 `npm run check` verifies JavaScript syntax, all 14 chapters, unique IDs, internal anchor destinations, required local assets, and the real join destination.
 
-Browser checks cover the desktop hero, WebGL initialization, program selection, project details, ID personalization and flipping, motion controls, mobile navigation, and horizontal overflow at 390px and 320px viewports. These are emulated viewport checks, not a physical low-end Android benchmark.
+Browser checks also cover idea selection, the workbench toggle, keyboard process navigation, and independent program tabs. Browser checks cover the desktop hero, WebGL initialization, program selection, project details, ID personalization and flipping, motion controls, mobile navigation, and horizontal overflow at 390px and 320px viewports. These are emulated viewport checks, not a physical low-end Android benchmark.
 
 ## Assets and reference use
 
 - `dist/assets/brand-original.jpg`: original logo embedded in the user-supplied challenge PDF. Brand rights remain with the owner.
 - `dist/vendor/three*.js`: Three.js 0.184.0, MIT; license included.
+- `dist/vendor/gsap.min.js` and `ScrollTrigger.min.js`: GSAP 3.15.0; original notices preserved. See `GSAP-NOTICE.txt` and https://gsap.com/standard-license.
 - `dist/vendor/anime.esm.min.js`: Anime.js 4.5.0 from the supplied folder, MIT; license included.
 - Bricolage Grotesque and Manrope: self-hosted Latin variable WOFF2 files, downloaded from Google Fonts; SIL Open Font License texts included.
 - `dist/assets/workshop.webp`: original AI-generated editorial illustration, made with the built-in image-generation tool. It is not a photograph of an actual Cre8TechIN event or evidence of student participation.

@@ -1,5 +1,8 @@
 import * as THREE from "./vendor/three.module.min.js";
 import { animate, stagger } from "./vendor/anime.esm.min.js";
+const { gsap, ScrollTrigger } = window;
+gsap.registerPlugin(ScrollTrigger);
+let chapterMotion = null;
 
 const sections = [...document.querySelectorAll(".scene")];
 const reduced = matchMedia("(prefers-reduced-motion: reduce)");
@@ -94,6 +97,7 @@ function syncMotion() {
     el.style.removeProperty("--magnetic-y");
   });
   updateScroll();
+  if (chapterMotion) gsap.matchMediaRefresh();
   dirty = true;
 }
 motionButton.addEventListener("click", () => {
@@ -175,7 +179,7 @@ const tracks = {
     ],
   },
 };
-const tabs = [...document.querySelectorAll("[role=tab]")];
+const tabs = [...document.querySelectorAll(".program-tabs [role=tab]")];
 function chooseTrack(tab) {
   tabs.forEach((t) => {
     const selected = t === tab;
@@ -204,6 +208,7 @@ function chooseTrack(tab) {
       ease: "outQuad",
     });
   measure();
+  ScrollTrigger.refresh();
 }
 tabs.forEach((tab, i) => {
   tab.addEventListener("click", () => chooseTrack(tab));
@@ -331,6 +336,61 @@ card.addEventListener("pointermove", (e) => {
   card.style.transform = `rotateX(${-y * 14}deg) rotateY(${(card.classList.contains("flipped") ? 180 : 0) + x * 22}deg) rotateZ(3deg)`;
 });
 card.addEventListener("pointerleave", () => (card.style.transform = ""));
+const ideaDirections = {
+  web: ["↗", "What if your campus had one place for everything?", "Start with a useful campus hub. Bring events, resources, and people together."],
+  ai: ["✳", "What if your notes could help you practise?", "Turn a set of sample notes into questions, flashcards, and a focused study session."],
+  security: ["⌁", "What if suspicious activity was easier to spot?", "Build a clear dashboard that helps someone explore unusual events in sample data."]
+};
+document.querySelectorAll("[data-idea]").forEach((button) => button.addEventListener("click", () => {
+  document.querySelectorAll("[data-idea]").forEach((el) => el.setAttribute("aria-pressed", String(el === button)));
+  const [symbol, title, description] = ideaDirections[button.dataset.idea];
+  document.querySelector("#idea-symbol").textContent = symbol;
+  document.querySelector("#idea-title").textContent = title;
+  document.querySelector("#idea-description").textContent = description;
+  if (!paused) gsap.fromTo(".idea-result", { autoAlpha: 0.3, y: 8 }, { autoAlpha: 1, y: 0, duration: 0.45, ease: "power2.out", overwrite: true });
+  measure();
+  ScrollTrigger.refresh();
+}));
+document.querySelector("#workbench-toggle").addEventListener("click", (event) => {
+  const button = event.currentTarget;
+  const building = button.getAttribute("aria-pressed") !== "true";
+  button.setAttribute("aria-pressed", String(building));
+  document.querySelector(".build-workbench").dataset.mode = building ? "build" : "watch";
+  document.querySelector("#workbench-label").textContent = building ? "YOUR FIRST PROJECT PLAN" : "THE NEXT MOVE IS YOURS";
+  document.querySelector("#workbench-title").textContent = building ? "One useful feature. One first commit." : "Close one tab. Open a possibility.";
+  document.querySelector("#workbench-description").textContent = building ? "Create a page, connect one interaction, and explain what you made in a README. That is a place to start." : "Take the thing you just learned and give it a job to do.";
+  button.firstChild.textContent = building ? "Back to the starting point " : "Turn it into a project ";
+  if (!paused) gsap.fromTo(".workbench-files > div", { x: -10, autoAlpha: 0.3 }, { x: 0, autoAlpha: 1, stagger: 0.08, duration: 0.5, ease: "power3.out", overwrite: true });
+  measure();
+  ScrollTrigger.refresh();
+});
+const processSteps = {
+  build: ["↗", "START SMALL. START YOURS.", "Make the first version.", "Choose one problem. Write the first line. Build something you can put in front of another person."],
+  learn: ["↔", "FEEDBACK IS PART OF THE WORK.", "Find a better way.", "Walk someone through your project. Ask a useful question. Take the feedback and improve one thing."],
+  launch: ["↑", "GIVE YOUR WORK A PLACE TO LIVE.", "Share what you made.", "Publish a working demo, document the choices you made, and show the project behind the skills."]
+};
+const stepTabs = [...document.querySelectorAll("[data-step]")];
+function chooseStep(button) {
+  stepTabs.forEach((el) => { const selected = el === button; el.setAttribute("aria-selected", String(selected)); el.tabIndex = selected ? 0 : -1; });
+  const values = processSteps[button.dataset.step];
+  ["sequence-mark", "sequence-kicker", "sequence-title", "sequence-description"].forEach((id, i) => document.getElementById(id).textContent = values[i]);
+  document.querySelector("#sequence-panel").setAttribute("aria-labelledby", button.id);
+  if (!paused) gsap.fromTo("#sequence-panel", { autoAlpha: 0.3, y: 10 }, { autoAlpha: 1, y: 0, duration: 0.45, ease: "power2.out", overwrite: true });
+  measure();
+  ScrollTrigger.refresh();
+}
+stepTabs.forEach((button, i) => {
+  button.addEventListener("click", () => chooseStep(button));
+  button.addEventListener("keydown", (event) => {
+    let next = i;
+    if (["ArrowRight", "ArrowDown"].includes(event.key)) next = (i + 1) % stepTabs.length;
+    else if (["ArrowLeft", "ArrowUp"].includes(event.key)) next = (i + stepTabs.length - 1) % stepTabs.length;
+    else if (event.key === "Home") next = 0;
+    else if (event.key === "End") next = stepTabs.length - 1;
+    else return;
+    event.preventDefault(); stepTabs[next].focus(); chooseStep(stepTabs[next]);
+  });
+});
 // Paused Web Animations are scrubbed by native scroll, including reverse scrolling.
 // Individual translate/rotate properties preserve the card's hover and flip transforms.
 function scrollAnimate(el, frames, range = 0.55) {
@@ -339,8 +399,8 @@ function scrollAnimate(el, frames, range = 0.55) {
   el.dataset.scrollMotion = "true";
   scrollTracks.push({ el, animation, range, top: 0 });
 }
-document.querySelectorAll(".scene:not(.hero) h2,.scene:not(.hero) .section-copy,.old-loop > span,.manifesto-words > span,.feedback-flow > span,.program-tabs > button,.project-card,.proof-list > span,.stats > div").forEach((el, i) => {
-  scrollAnimate(el, [{ opacity: 0.12, translate: "0 32px" }, { opacity: 1, translate: "0 0" }], 0.22 + (i % 3) * 0.025);
+document.querySelectorAll(".scene:not(.hero) h2,.scene:not(.hero) .section-copy,.old-loop > span,.manifesto-words > span,.feedback-flow > span,.program-tabs > button,.project-card,.proof-list > span,.stats > div,.sequence-steps button,.idea-options button,.studio-top,.sequence-top").forEach((el, i) => {
+  scrollAnimate(el, el.matches("button") ? [{ opacity: 0.2 }, { opacity: 1 }] : [{ opacity: 0.12, translate: "0 32px" }, { opacity: 1, translate: "0 0" }], 0.22 + (i % 3) * 0.025);
 });
 scrollAnimate(document.querySelector(".join-button"), [{ opacity: 0.4, scale: 0.97 }, { opacity: 1, scale: 1 }], 0.25);
 scrollAnimate(document.querySelector(".discipline-strip"), [{ translate: "16% 0" }, { translate: "-10% 0" }], 1.5);
@@ -364,7 +424,7 @@ document.querySelectorAll("[data-count]").forEach((el) => {
   counterTracks.push({ el, total: Number(el.dataset.count), top: 0 });
 });
 // A small magnetic pull is reserved for mouse users; touch targets stay still.
-document.querySelectorAll(".button,.nav-join,.header nav a,.text-link,.hype-arrow,.motion-toggle,.dialog-close,.menu-toggle").forEach((el) => {
+document.querySelectorAll(".button,.nav-join,.header nav a,.text-link,.hype-arrow,.motion-toggle,.dialog-close,.menu-toggle,.idea-options button,.sequence-steps button,.studio-bottom a").forEach((el) => {
   el.classList.add("magnetic");
   const reset = () => {
     el.style.setProperty("--magnetic-x", "0px");
@@ -383,6 +443,20 @@ document.querySelectorAll(".button,.nav-join,.header nav a,.text-link,.hype-arro
   el.addEventListener("blur", reset);
 });
 measure();
+
+// GSAP owns only the new chapter visuals; existing text/hover transforms stay independent.
+chapterMotion = gsap.matchMedia();
+chapterMotion.add({ desktop: "(min-width: 761px)", mobile: "(max-width: 760px)", reduce: "(prefers-reduced-motion: reduce)" }, (context) => {
+  if (paused || context.conditions.reduce) return;
+  const distance = context.conditions.desktop ? 45 : 22;
+  const idea = gsap.timeline({ defaults: { ease: "none" }, scrollTrigger: { trigger: ".idea-studio", start: "clamp(top 90%)", end: "clamp(bottom 35%)", scrub: 0.45 } });
+  idea.fromTo(".sheet-back", { y: distance, rotationZ: -28 }, { y: 0, rotationZ: -18, duration: 1 }, 0)
+    .fromTo(".sheet-front", { y: distance * 1.6, rotationZ: 8 }, { y: -5, rotationZ: -8, duration: 1 }, 0)
+    .fromTo(".drawing-grid", { autoAlpha: 0.1 }, { autoAlpha: 1, duration: 1 }, 0);
+  gsap.fromTo(".workbench-files", { y: 25, autoAlpha: 0.25 }, { y: 0, autoAlpha: 1, ease: "none", scrollTrigger: { trigger: ".build-workbench", start: "clamp(top 75%)", end: "clamp(center 50%)", scrub: 0.35 } });
+  gsap.fromTo(".sequence-art", { rotationY: -35, scale: 0.8 }, { rotationY: 0, scale: 1, ease: "none", scrollTrigger: { trigger: ".launch-sequence", start: "clamp(top 85%)", end: "clamp(bottom 65%)", scrub: 0.4 } });
+});
+document.fonts.ready.then(() => ScrollTrigger.refresh());
 
 let renderer;
 try {
