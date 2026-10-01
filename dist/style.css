@@ -2991,3 +2991,5 @@ select:focus-visible { border-color: #d0b27a; }
 .idea-result { min-height:170px; }
 @media(max-width:760px) { .idea-drawing { height:220px; } .idea-result { min-height:0; } }
 @media(max-width:760px) { .drawing-label { display:none; } }
+html.motion-paused { scroll-behavior:auto !important; }
+@media(prefers-reduced-motion:reduce) { html { scroll-behavior:auto !important; } }
