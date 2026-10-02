@@ -3147,3 +3147,12 @@ img.content-feedback.feedback-hover { filter:brightness(1.12) saturate(1.08); }
 }
 html.motion-paused .content-feedback { transition:none; }
 @media(prefers-reduced-motion:reduce) { .content-feedback { transition:none; } }
+
+/* Two equal copies make the right-to-left loop seamless. */
+.discipline-strip { padding-inline:0;gap:0; }
+.discipline-track { display:flex;width:max-content;animation:discipline-marquee 35s linear infinite; }
+.discipline-group { display:flex;flex-shrink:0;align-items:center;justify-content:space-around;gap:36px;padding-right:36px;min-width:100vw; }
+@keyframes discipline-marquee { to { transform:translateX(-50%); } }
+html.motion-paused .discipline-track { animation-play-state:paused; }
+@media(prefers-reduced-motion:reduce) { .discipline-track { animation:none; } }
+@media(max-width:760px) { .discipline-group { gap:22px;padding-right:22px; } }

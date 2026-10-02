@@ -117,3 +117,7 @@ Published Standard ₹1,499 / Premium ₹4,999 plans, four-week format, and Care
 At the user's request, the course section now presents three illustrative beginner courses: AI & Machine Learning Basics, Web Development Fundamentals, and Python Essentials. Course names, 4–6 week durations, and curricula are demo content rather than verified offerings. Real pricing has been removed from this showcase. The section labels this clearly and links separately to the official programs site.
 
 Subtle brightness and gold text glow respond to mouse hover and touch on copy, numbers, and images, alongside existing button feedback. Cards gain a restrained border/background response. Text remains selectable and readable; transforms owned by scrolling are preserved. Reduced-motion and pause settings suppress the added transitions.
+
+### Continuous chapter motion
+
+The discipline strip uses two equal text groups for a seamless right-to-left CSS marquee; the duplicate is hidden from assistive technology. The chapter-six mentor network rotates continuously while active, using frame delta time rather than scroll alone. Both respect the motion toggle and reduced-motion preference.

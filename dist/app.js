@@ -377,7 +377,6 @@ document.querySelectorAll(".scene:not(.hero) h2,.scene:not(.hero) .section-copy,
   scrollAnimate(el, el.matches("button") ? [{ opacity: 0.2 }, { opacity: 1 }] : [{ opacity: 0.12, translate: "0 32px" }, { opacity: 1, translate: "0 0" }], 0.22 + (i % 3) * 0.025);
 });
 scrollAnimate(document.querySelector(".join-button"), [{ opacity: 0.4, scale: 0.97 }, { opacity: 1, scale: 1 }], 0.25);
-scrollAnimate(document.querySelector(".discipline-strip"), [{ translate: "16% 0" }, { translate: "-10% 0" }], 1.5);
 scrollAnimate(document.querySelector(".community-photo"), [{ scale: 1.18, translate: "0 -3%" }, { scale: 1, translate: "0 3%" }], 1.7);
 scrollAnimate(document.querySelector(".id-stage"), [{ rotate: "-8deg", translate: "0 70px" }, { rotate: "0deg", translate: "0 0" }], 0.9);
 scrollAnimate(document.querySelector(".proof-art"), [{ rotate: "-18deg", scale: 0.8 }, { rotate: "0deg", scale: 1 }], 1);
@@ -874,6 +873,7 @@ if (renderer) {
     network: [2.75, 0, 1.08], portal: [3.05, -0.1, 1.03]
   };
   let last = 0;
+  let networkSpin = 0;
   renderer.domElement.addEventListener("webglcontextlost", (e) => {
     e.preventDefault();
     document.body.classList.remove("webgl-ready");
@@ -893,6 +893,7 @@ if (renderer) {
     dirty = false;
     const mobile = innerWidth < 760;
     const type = sections[active].dataset.world;
+    if (!paused && type === "network") networkSpin = (networkSpin + dt * 0.22) % (Math.PI * 2);
     const [tx, ty, scale] = placements[type] || [0, 0, 0];
     const b = bounds[active];
     const travel = paused ? 0.5 : clamp((scrollY + innerHeight * 0.45 - b.top) / b.height);
@@ -958,11 +959,11 @@ if (renderer) {
     screenGroup.rotation.x = -1.3 + THREE.MathUtils.smoothstep(travel, 0, 0.65) * 1.15;
     network.rotation.set(
       0.2 + tiltY,
-      travel * 1.6 + tiltX,
+      travel * 1.6 + tiltX + networkSpin,
       -0.2,
     );
-    hub.rotation.set(travel, travel * 2, 0);
-    halo.rotation.set(1.1, 0.3 + travel * 2, 0.2);
+    hub.rotation.set(travel, travel * 2 + networkSpin, 0);
+    halo.rotation.set(1.1, 0.3 + travel * 2 + networkSpin, 0.2);
     portal.rotation.y = -0.45 + travel * 0.65 + tiltX * 0.3;
     portal.rotation.z = 0;
     portal.position.z = sections[active].id === "join" ? travel * 0.3 : 0;
