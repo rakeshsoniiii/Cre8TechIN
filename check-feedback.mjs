@@ -19,7 +19,7 @@ const plainText = new Element();
 const button = new Element(true);
 const pointer = { target: copy, pointerType: 'touch', isPrimary: true, button: 0, pointerId: 1, clientX: 0, clientY: 0 };
 listeners.pointerdown({ ...pointer, target: plainText });
-assert(!plainText.classes.has('feedback-pressed'), 'Plain copy does not pretend to be a control');
+assert(plainText.classes.has('feedback-pressed'), 'Plain copy receives touch feedback without becoming a button');
 listeners.pointerdown(pointer);
 assert(copy.classes.has('feedback-pressed'), 'Touch highlights controls');
 listeners.pointermove({ ...pointer, clientY: 15 });

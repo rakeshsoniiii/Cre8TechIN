@@ -3133,3 +3133,17 @@ html { scroll-padding-top:24px; }
  .header .nav-join { min-height:44px; }
  .join .join-button { font-size:14px; }
 }
+
+/* Hover adds light and depth without disturbing scroll transforms or text layout. */
+.content-feedback { transition:filter 240ms ease,text-shadow 240ms ease; }
+.content-feedback.feedback-hover,.content-feedback.feedback-pressed { filter:brightness(1.16);text-shadow:0 0 18px #d6bc8155; }
+img.content-feedback.feedback-hover { filter:brightness(1.12) saturate(1.08); }
+.program-facts > div,.idea-studio,.program-panel,.sequence-panel,details { transition:background-color 250ms ease,box-shadow 250ms ease; }
+@media(hover:hover) and (pointer:fine) {
+ .program-facts > div:hover { background-color:#d0b78009;box-shadow:0 2px 0 #d0b78070; }
+ .idea-studio:hover,.program-panel:hover { box-shadow:inset 0 0 0 1px #d0b78066,0 18px 50px #0003; }
+ .sequence-panel:hover,details:hover { background-color:#d0b78008; }
+ .brand:hover img { filter:brightness(1.25); }
+}
+html.motion-paused .content-feedback { transition:none; }
+@media(prefers-reduced-motion:reduce) { .content-feedback { transition:none; } }

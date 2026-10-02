@@ -111,3 +111,9 @@ Feedback is limited to actual controls: buttons, links, inputs, and disclosure s
 Programs moved immediately after the hero; the repeated question and hype chapters were removed. Typography, section spacing, mobile labels, gallery layout, FAQ and footer were revised. The sculpture has wider, smoother bevels. Real content links and the 12-chapter sequence are checked by `node check.mjs`; interaction cleanup is checked by `node check-feedback.mjs`.
 
 Published Standard ₹1,499 / Premium ₹4,999 plans, four-week format, and Carel Simon's listed mentor role are attributed to https://cre8techin.in/ (checked 1 October 2026). These are publisher claims, not independent verification. Cohort dates, weekly hours, approved student demo URLs, working mentor profile links, contact details, social profiles and policy URLs remain unavailable in the verified sources. No such details or testimonials have been invented; the UI explains what to confirm before enrollment.
+
+### Course showcase — 2 October 2026
+
+At the user's request, the course section now presents three illustrative beginner courses: AI & Machine Learning Basics, Web Development Fundamentals, and Python Essentials. Course names, 4–6 week durations, and curricula are demo content rather than verified offerings. Real pricing has been removed from this showcase. The section labels this clearly and links separately to the official programs site.
+
+Subtle brightness and gold text glow respond to mouse hover and touch on copy, numbers, and images, alongside existing button feedback. Cards gain a restrained border/background response. Text remains selectable and readable; transforms owned by scrolling are preserved. Reduced-motion and pause settings suppress the added transitions.

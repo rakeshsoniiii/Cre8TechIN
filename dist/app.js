@@ -147,37 +147,22 @@ if (!paused)
 
 const tracks = {
   ai: {
-    tag: "4 WEEKS · INTERMEDIATE",
-    title: "AI/ML Project Builder",
-    description:
-      "Work with real-world datasets, build an intelligent model, and take it all the way to deployment.",
-    outcomes: [
-      "Image classification model",
-      "NLP sentiment analyzer",
-      "A complete ML pipeline",
-    ],
+    tag: "DEMO COURSE · 4 WEEKS · BEGINNER",
+    title: "AI & Machine Learning Basics",
+    description: "Explore Python, understand how models learn, and create a simple prediction project using sample data.",
+    outcomes: ["Week 1 · Python and data fundamentals", "Week 2–3 · Train and evaluate a simple model", "Week 4 · Build a prediction demo"],
   },
   web: {
-    tag: "BUILD A CONNECTED EXPERIENCE",
-    title: "Web + AI",
-    description:
-      "Bring your interface, application logic, and an intelligent feature together in a useful web project.",
-    outcomes: [
-      "An interface people can use",
-      "Connected data and APIs",
-      "A project you can demonstrate",
-    ],
+    tag: "DEMO COURSE · 6 WEEKS · BEGINNER",
+    title: "Web Development Fundamentals",
+    description: "Learn HTML, CSS, and JavaScript while building a responsive personal portfolio from scratch.",
+    outcomes: ["Week 1–2 · Structure pages with HTML and CSS", "Week 3–4 · Add JavaScript interactions", "Week 5–6 · Polish and publish a portfolio"],
   },
   explore: {
-    tag: "FOLLOW YOUR CURIOSITY",
-    title: "Find your next challenge",
-    description:
-      "Curious about cybersecurity, research, design, or product building? Explore the current programs to find your starting point.",
-    outcomes: [
-      "Discover available project tracks",
-      "Choose a problem worth solving",
-      "Build with a clear outcome in mind",
-    ],
+    tag: "DEMO COURSE · 4 WEEKS · BEGINNER",
+    title: "Python Essentials",
+    description: "Get comfortable with variables, functions, and files. Put the basics together in a small everyday automation project.",
+    outcomes: ["Week 1 · Variables, conditions, and loops", "Week 2–3 · Functions, collections, and files", "Week 4 · Create a personal task tracker"],
   },
 };
 const tabs = [...document.querySelectorAll(".program-tabs [role=tab]")];
@@ -429,13 +414,19 @@ document.querySelectorAll(".button,.nav-join,.header nav a,.text-link,.hype-arro
   el.addEventListener("pointerdown", reset);
   el.addEventListener("blur", reset);
 });
-// Delegate feedback to real controls; body copy stays stable and selectable.
+// One feedback layer for controls, copy, numbers, and imagery; no gesture interception.
 const controlSelector = 'a,button,input,select,textarea,summary,[role="button"]';
 let hoveredFeedback = null;
 let pressedFeedback = null;
 let releaseFeedback;
 function feedbackTarget(target) {
-  return target instanceof Element ? target.closest(controlSelector) : null;
+  if (!(target instanceof Element)) return null;
+  const control = target.closest(controlSelector);
+  if (control) return control;
+  const content = target.closest('h1,h2,h3,h4,p,span,b,strong,em,small,label,li,figcaption,img,.program-facts > div,.idea-studio,.program-panel');
+  if (!content || content.closest('[aria-hidden="true"]')) return null;
+  content.classList.add('content-feedback');
+  return content;
 }
 function clearPress() {
   clearTimeout(releaseFeedback);
