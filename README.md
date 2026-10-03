@@ -1,4 +1,4 @@
-# Cre8TechIN — For the ones who build
+# Cre8TechIN — For the ones who build.
 
 A complete 12-chapter, scroll-driven experience made for the **Cre8TechIN 3D Immersive Web Experience Challenge**. The story moves from curiosity to creation, belonging, proof, and a first step into a real program.
 
