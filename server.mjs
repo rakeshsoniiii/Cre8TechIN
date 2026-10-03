@@ -32,4 +32,4 @@ createServer(async (req, res) => {
   } catch {
     res.writeHead(404).end("Not found");
   }
-}).listen(4173, "127.0.0.1", () => console.log("Local: http://127.0.0.1:4173"));
+}).listen(3000, "0.0.0.0", () => console.log("Server listening on 0.0.0.0:3000"));
