@@ -6,7 +6,7 @@ A complete 12-chapter, scroll-driven experience made for the **Cre8TechIN 3D Imm
 
 Requires Node.js 20 or newer. No install or build step is needed: runtime libraries are pinned and bundled locally.
 
-```sh
+```sh.
 npm run dev
 ```
 
