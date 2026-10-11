@@ -2,7 +2,7 @@
 
 A complete 12-chapter, scroll-driven experience made for the **Cre8TechIN 3D Immersive Web Experience Challenge**. The story moves from curiosity to creation, belonging, proof, and a first step into a real program.
 
-## Run locally.
+## Run locally..
 
 Requires Node.js 20 or newer. No install or build step is needed: runtime libraries are pinned and bundled locally.
 
