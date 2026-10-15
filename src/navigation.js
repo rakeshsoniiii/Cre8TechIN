@@ -19,7 +19,7 @@ if(!header.classList.contains('header')){
 // Load the auth client only after the navigation itself works.
 import('./client.js').then(async({db})=>{
  const {data:{session}}=await db.auth.getSession();if(!session)return;
- const link=document.querySelector('#account-link');link.href='/dashboard.html';link.querySelector('.nav-copy').textContent='Workspace';
+ const link=document.querySelector('#account-link');link.href='/dashboard.html';link.querySelector('.nav-copy').textContent='Dashboard';
  const {data,error}=await db.from('c8_applications').select('reference,status,review_note,updated_at').order('updated_at',{ascending:false}).limit(10);
  const items=document.querySelector('#notification-items');
  if(error){items.textContent='Updates could not be loaded. Open your workspace to retry.';return;}
