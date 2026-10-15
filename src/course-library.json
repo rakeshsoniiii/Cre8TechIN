@@ -1,0 +1,341 @@
+[
+  {
+    "id": "c-programming",
+    "title": "C Programming",
+    "description": "Master the fundamentals of C programming language",
+    "category": "Programming",
+    "difficulty": "Beginner",
+    "videos": [
+      "KJgsSFOSQv0",
+      "87SH2Cn0s9A",
+      "irqbmMNs2Bo",
+      "Bz4MxDeEM6k"
+    ]
+  },
+  {
+    "id": "cpp",
+    "title": "C++ Programming",
+    "description": "Learn object-oriented programming with C++",
+    "category": "Programming",
+    "difficulty": "Intermediate",
+    "videos": [
+      "-TkoO8Z07hI",
+      "vLnPwxZdW4Y",
+      "ZzaPdXTrSb8",
+      "iVLQeWbgbXs"
+    ]
+  },
+  {
+    "id": "python",
+    "title": "Python Programming",
+    "description": "Start your journey with the versatile Python language",
+    "category": "Programming",
+    "difficulty": "Beginner",
+    "videos": [
+      "rfscVS0vtbw",
+      "HeW-D6KpDwY",
+      "8ext9G7xspg",
+      "fqF9M92jzUo"
+    ]
+  },
+  {
+    "id": "java",
+    "title": "Java Programming",
+    "description": "Learn Java with OOP concepts and real projects",
+    "category": "Programming",
+    "difficulty": "Intermediate",
+    "videos": [
+      "xk4_1vDrzzo",
+      "eTXd89t8ngI",
+      "5o3fMLPY7qY",
+      "UmnCZ7-9yDY"
+    ]
+  },
+  {
+    "id": "web-dev",
+    "title": "Web Development",
+    "description": "Build websites with HTML, CSS, and JavaScript",
+    "category": "Web",
+    "difficulty": "Beginner",
+    "videos": [
+      "kUMe1FH4CHE",
+      "HGTJBPNC-Gw",
+      "PkZNo7MFNFg",
+      "krfUjg0S2uI"
+    ]
+  },
+  {
+    "id": "mern",
+    "title": "Full Stack Web Dev (MERN)",
+    "description": "Build modern web apps with MongoDB, Express, React, Node.js",
+    "category": "Web",
+    "difficulty": "Advanced",
+    "videos": [
+      "98BzS5Oz5E4",
+      "CvCiNeLnZ00",
+      "RGKi6LSPDLU",
+      "XuFDcZABiDQ"
+    ]
+  },
+  {
+    "id": "data-science",
+    "title": "Data Science with Python",
+    "description": "Analyze and visualize data using Python",
+    "category": "Data",
+    "difficulty": "Intermediate",
+    "videos": [
+      "ua-CiDNNj30",
+      "r-uOLxNrNk8",
+      "aircAruvnKk",
+      "LHBE6Q9XlzI"
+    ]
+  },
+  {
+    "id": "ml-ai",
+    "title": "Machine Learning & AI",
+    "description": "Introduction to ML algorithms and AI concepts",
+    "category": "Data",
+    "difficulty": "Advanced",
+    "videos": [
+      "7eh4d6sabA0",
+      "VCJdg7YBbAQ",
+      "i_LwzRVP7bg",
+      "Hr06nSA-qww"
+    ]
+  },
+  {
+    "id": "dsa",
+    "title": "Data Structures & Algorithms",
+    "description": "Master essential DSA concepts for coding interviews",
+    "category": "Programming",
+    "difficulty": "Intermediate",
+    "videos": [
+      "8hly31xKli0",
+      "RBSGKlAvoiM",
+      "nqowUJzG-iM",
+      "0IAPZzGSbME"
+    ]
+  },
+  {
+    "id": "flutter",
+    "title": "Mobile App Dev (Flutter)",
+    "description": "Build cross-platform mobile apps with Flutter",
+    "category": "Mobile",
+    "difficulty": "Intermediate",
+    "videos": [
+      "1ukSR1GRtMU",
+      "x0uinJvhNxI",
+      "VPvVD8t02U8",
+      "D4nhaszNW4o"
+    ]
+  },
+  {
+    "id": "aws",
+    "title": "Cloud Computing with AWS",
+    "description": "Deploy and manage applications on AWS cloud",
+    "category": "Cloud",
+    "difficulty": "Intermediate",
+    "videos": [
+      "ubCNZRNjhyo",
+      "3hLmDS179YE",
+      "Tg2krHXHzBc",
+      "3jZ5vnv-LZc"
+    ]
+  },
+  {
+    "id": "data-analyst",
+    "title": "Data Analyst",
+    "description": "Become a data analyst with statistical and visualization skills",
+    "category": "Data",
+    "difficulty": "Beginner",
+    "videos": [
+      "NMuV2o9yrE4",
+      "Vl0H-qTclOg",
+      "7mz73uXD9DA",
+      "rfscVS0vtbw",
+      "3u7MQz1EyPY"
+    ]
+  },
+  {
+    "id": "power-bi",
+    "title": "Power BI",
+    "description": "Create interactive dashboards and business intelligence reports",
+    "category": "Data",
+    "difficulty": "Beginner",
+    "videos": [
+      "3u7MQz1EyPY",
+      "AGrl-H87pRU",
+      "5X5LWcLtkzg",
+      "mmxVCFceQgU"
+    ]
+  },
+  {
+    "id": "game-dev",
+    "title": "Game Developer (Android & iOS)",
+    "description": "Build 2D/3D mobile games for Android and iOS using Unity and C#",
+    "category": "Mobile",
+    "difficulty": "Intermediate",
+    "videos": [
+      "gB1F9G0JXOo",
+      "j48LtUkZRjU",
+      "XtQMytORBmM",
+      "IlKaB1etrik"
+    ]
+  },
+  {
+    "id": "qa-tester",
+    "title": "Software QA Tester (Bug Hunter)",
+    "description": "Master software testing, bug tracking, and QA methodologies",
+    "category": "Programming",
+    "difficulty": "Beginner",
+    "videos": [
+      "sO8eGL6SFsA",
+      "rFkECVidHRk",
+      "pc5qdmRNPFE",
+      "fI4t6MgFo7M"
+    ]
+  },
+  {
+    "id": "ui-ux",
+    "title": "UI/UX Designer",
+    "description": "Design beautiful, user-centred interfaces using Figma and design thinking",
+    "category": "Design",
+    "difficulty": "Beginner",
+    "videos": [
+      "c9Wg6Cb_YlU",
+      "FM0PCmUxm98",
+      "4W4LvJnNegA",
+      "lTIeZ2ahEkQ"
+    ]
+  },
+  {
+    "id": "digital-marketing",
+    "title": "Digital Marketing",
+    "description": "Learn SEO, social media marketing, Google Ads, and growth strategies",
+    "category": "Marketing",
+    "difficulty": "Beginner",
+    "videos": [
+      "bixR-KIJKYM",
+      "hiEd0sbGGAk",
+      "FmRALMELfN0",
+      "gGEzKVzxiMc"
+    ]
+  },
+  {
+    "id": "video-editor",
+    "title": "Video Editor & Content Creator",
+    "description": "Master video editing, storytelling, and content creation for YouTube & social media",
+    "category": "Creative",
+    "difficulty": "Beginner",
+    "videos": [
+      "O6ERELse_QY",
+      "3N2tBSFlHKA",
+      "5-O9f3aFWqo",
+      "VOI5TkHR5oU"
+    ]
+  },
+  {
+    "id": "iot-ai",
+    "title": "IoT with AI",
+    "description": "Build intelligent IoT systems powered by AI and machine learning",
+    "category": "IoT",
+    "difficulty": "Advanced",
+    "videos": [
+      "LlhmzVL5bm8",
+      "6mSx_KJxcHI",
+      "Q3urXL_8-GY",
+      "h0gWfVCSGQQ"
+    ]
+  },
+  {
+    "id": "iot-c-embedded",
+    "title": "IoT & C Embedded Programming",
+    "description": "Master embedded C programming for IoT microcontrollers and hardware",
+    "category": "IoT",
+    "difficulty": "Intermediate",
+    "videos": [
+      "VHwyLBdExBs",
+      "3gwYdFIMmNY",
+      "CqzJrdSCMGs",
+      "P_PnAYkYBcY"
+    ]
+  },
+  {
+    "id": "edu-content-creator",
+    "title": "Educational Content Creator Intern",
+    "description": "Learn to create engaging educational content for YouTube, courses, and social media",
+    "category": "Education",
+    "difficulty": "Beginner",
+    "videos": [
+      "s2SYiJEhpY0",
+      "UvRCK3Mjyag",
+      "O6ERELse_QY",
+      "hVimVzgtD6w"
+    ]
+  },
+  {
+    "id": "3d-cad-design",
+    "title": "3D Modeling & CAD for Simulation",
+    "description": "Master 3D modeling, graphic design, simulation, and CAD design for engineering",
+    "category": "3D/CAD",
+    "difficulty": "Intermediate",
+    "videos": [
+      "nIoXOplUvAw",
+      "bpvh-9H8S1Q",
+      "TPrnSACiTJ4",
+      "sBkPAB0P0YI"
+    ]
+  },
+  {
+    "id": "ai-automation",
+    "title": "AI Automation Engineer",
+    "description": "Build intelligent automation systems using AI, APIs, and no-code/low-code tools",
+    "category": "AI/Automation",
+    "difficulty": "Intermediate",
+    "videos": [
+      "x7X9w_GIm1s",
+      "heXuVol-wHM",
+      "dQw4w9WgXcQ",
+      "jGwO_UgTS7I"
+    ]
+  },
+  {
+    "id": "software-engineer",
+    "title": "Software Engineer",
+    "description": "Master software engineering fundamentals, design patterns, system design & DevOps",
+    "category": "Programming",
+    "difficulty": "Intermediate",
+    "videos": [
+      "zOjov-2OZ0E",
+      "pTB0EiLXUC8",
+      "F5mRW0jo-U4",
+      "j5Zsa_eOXeY"
+    ]
+  },
+  {
+    "id": "deep-learning",
+    "title": "Deep Learning & AI",
+    "description": "Master neural networks, CNNs, RNNs, GANs, and advanced deep learning architectures",
+    "category": "AI/DL",
+    "difficulty": "Advanced",
+    "videos": [
+      "aircAruvnKk",
+      "VMj-3S1tku0",
+      "QDX-1M5Nj7s",
+      "GIsg-ZUy0MY"
+    ]
+  },
+  {
+    "id": "genai-llm",
+    "title": "Generative AI & LLMs",
+    "description": "Build, fine-tune, and deploy Large Language Models and generative AI applications",
+    "category": "AI/DL",
+    "difficulty": "Advanced",
+    "videos": [
+      "zjkBMFhNj_g",
+      "kCc8FmEb1nY",
+      "bZQun8Y4L2A",
+      "jGwO_UgTS7I"
+    ]
+  }
+]

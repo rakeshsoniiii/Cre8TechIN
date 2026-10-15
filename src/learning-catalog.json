@@ -1,0 +1,89 @@
+[
+  {
+    "slug": "python",
+    "title": "Python Programming",
+    "description": "Start your journey with the versatile Python language",
+    "skills": "Python, problem solving, automation",
+    "projects": "A documented Python automation tool",
+    "curriculum": [
+      {
+        "title": "Foundations",
+        "task": "Learn the foundations and document a small working experiment.",
+        "video": "https://www.youtube.com/embed/rfscVS0vtbw"
+      },
+      {
+        "title": "Prototype",
+        "task": "Build a working prototype and explain your implementation decisions.",
+        "video": "https://www.youtube.com/embed/HeW-D6KpDwY"
+      },
+      {
+        "title": "Iteration",
+        "task": "Add a useful feature, test it, and document improvements.",
+        "video": "https://www.youtube.com/embed/8ext9G7xspg"
+      },
+      {
+        "title": "Project showcase",
+        "task": "Present your completed project with a README, demo and reflection.",
+        "video": "https://www.youtube.com/embed/fqF9M92jzUo"
+      }
+    ]
+  },
+  {
+    "slug": "web-dev",
+    "title": "Web Development",
+    "description": "Build websites with HTML, CSS, and JavaScript",
+    "skills": "HTML, CSS, JavaScript, responsive interfaces",
+    "projects": "A responsive web application",
+    "curriculum": [
+      {
+        "title": "Foundations",
+        "task": "Learn the foundations and document a small working experiment.",
+        "video": "https://www.youtube.com/embed/kUMe1FH4CHE"
+      },
+      {
+        "title": "Prototype",
+        "task": "Build a working prototype and explain your implementation decisions.",
+        "video": "https://www.youtube.com/embed/HGTJBPNC-Gw"
+      },
+      {
+        "title": "Iteration",
+        "task": "Add a useful feature, test it, and document improvements.",
+        "video": "https://www.youtube.com/embed/PkZNo7MFNFg"
+      },
+      {
+        "title": "Project showcase",
+        "task": "Present your completed project with a README, demo and reflection.",
+        "video": "https://www.youtube.com/embed/krfUjg0S2uI"
+      }
+    ]
+  },
+  {
+    "slug": "ml-ai",
+    "title": "Machine Learning & AI",
+    "description": "Introduction to ML algorithms and AI concepts",
+    "skills": "Python, data preparation, model evaluation",
+    "projects": "A small machine learning project with evaluation",
+    "curriculum": [
+      {
+        "title": "Foundations",
+        "task": "Learn the foundations and document a small working experiment.",
+        "video": "https://www.youtube.com/embed/7eh4d6sabA0"
+      },
+      {
+        "title": "Prototype",
+        "task": "Build a working prototype and explain your implementation decisions.",
+        "video": "https://www.youtube.com/embed/VCJdg7YBbAQ"
+      },
+      {
+        "title": "Iteration",
+        "task": "Add a useful feature, test it, and document improvements.",
+        "video": "https://www.youtube.com/embed/i_LwzRVP7bg"
+      },
+      {
+        "title": "Project showcase",
+        "task": "Present your completed project with a README, demo and reflection.",
+        "video": "https://www.youtube.com/embed/Hr06nSA-qww"
+      }
+    ]
+  }
+]

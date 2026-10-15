@@ -11,7 +11,9 @@ for (const [, hash] of html.matchAll(/href="#([^"]+)"/g)) {
   assert(ids.includes(hash), `Navigation target is missing: ${hash}`);
 }
 for (const [, path] of html.matchAll(/(?:src|href)="((?!https?:|#)[^"]+)"/g)) {
-  await access(resolve("dist", path));
+  const url = new URL(path, 'https://example.test/');
+  await access(resolve("dist", url.pathname === '/' ? 'index.html' : url.pathname.slice(1)));
+  if (url.pathname === '/' && url.hash) assert(ids.includes(url.hash.slice(1)), `Missing anchor: ${url.hash}`);
 }
 for (const path of [
   "vendor/three.module.min.js",
@@ -33,8 +35,8 @@ for (const world of ["orbit", "laptop", "network", "portal"]) {
     `${world} must belong to exactly one chapter, never repeat across the story`);
 }
 assert(
-  html.includes("https://cre8techin.in/programs/"),
-  "Join must lead to the real programs page",
+  html.includes("/programs.html"),
+  "Join must lead to the program platform",
 );
 execFileSync(process.execPath, ["--check", "dist/app.js"]);
 execFileSync(process.execPath, ["--check", "server.mjs"]);

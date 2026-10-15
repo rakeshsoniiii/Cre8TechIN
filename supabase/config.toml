@@ -1,0 +1,6 @@
+project_id = "svnimrdtxcoxttcxifyr"
+
+[functions.platform]
+# The handler validates the user JWT with auth.getUser and checks c8_admins.
+# Gateway legacy JWT verification cannot validate publishable API keys.
+verify_jwt = false

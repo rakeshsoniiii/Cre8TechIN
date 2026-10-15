@@ -6,9 +6,15 @@
   "scripts": {
     "dev": "node server.mjs",
     "start": "node server.mjs",
-    "check": "node check.mjs && node check-feedback.mjs"
+    "build": "node scripts/build-platform.mjs",
+    "check": "node check.mjs && node check-feedback.mjs && node scripts/test-platform-db.mjs"
   },
   "dependencies": {
+    "@supabase/supabase-js": "2.110.0",
     "gsap": "3.15.0"
+  },
+  "devDependencies": {
+    "@electric-sql/pglite": "^0.5.9",
+    "esbuild": "^0.28.2"
   }
 }
