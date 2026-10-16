@@ -40,3 +40,7 @@ Source: the supplied Cre8TechIN_Round_2_Website_Task.pdf, all 10 pages.
 ## Skill Nexis reuse boundary
 
 Reviewed/adapted navigation and session-aware dashboard patterns, course metadata and lecture references, study notes/progress patterns, and the idea/vote flow. The one specified Supabase project owns the new backend. Environment files, source API credentials, default-password authentication, permissive anonymous voting, Google Forms, payments, blog and chatbot were not copied. This is not a complete clone or a completed line-by-line review of every reference file.
+
+## Usability revision - 16 October 2026
+
+The public entry is now labelled Login, including the form. Primary navigation is Programs, Learn and Dashboard; More contains supporting destinations and the user guide PDF. Personal dashboard and notification queries are explicitly scoped to the signed-in account, including for managers. The printable 11-page user manual explains current behavior without implementation details. These improvements do not close the release blockers listed above.

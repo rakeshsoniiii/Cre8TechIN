@@ -20,7 +20,7 @@ if(!header.classList.contains('header')){
 import('./client.js').then(async({db})=>{
  const {data:{session}}=await db.auth.getSession();if(!session)return;
  const link=document.querySelector('#account-link');link.href='/dashboard.html';link.querySelector('.nav-copy').textContent='Dashboard';
- const {data,error}=await db.from('c8_applications').select('reference,status,review_note,updated_at').order('updated_at',{ascending:false}).limit(10);
+ const {data,error}=await db.from('c8_applications').select('reference,status,review_note,updated_at').eq('user_id',session.user.id).order('updated_at',{ascending:false}).limit(10);
  const items=document.querySelector('#notification-items');
  if(error){items.textContent='Updates could not be loaded. Open your workspace to retry.';return;}
  const lastSeen=storage.get(`c8-notifications-${session.user.id}`)||'';
@@ -29,3 +29,7 @@ import('./client.js').then(async({db})=>{
  items.innerHTML=data.length?`<button id="mark-read" class="c8-read">Mark all read</button>${data.map(a=>`<a class="c8-update" href="/dashboard.html"><strong>${escapeText(a.status.replaceAll('_',' '))}</strong><small>${escapeText(a.reference)}</small><p>${escapeText(a.review_note||'Your application is saved in your workspace.')}</p></a>`).join('')}`:'<p>You’re all caught up. Application updates will appear here.</p>';
  document.querySelector('#mark-read')?.addEventListener('click',()=>{storage.set(`c8-notifications-${session.user.id}`,new Date().toISOString());badge.hidden=true;document.querySelector('#mark-read').textContent='All read';});
 }).catch(()=>{document.querySelector('#notification-items').textContent='Sign in to your workspace to view updates.';});
+const more=header.querySelector('.nav-more');
+header.querySelectorAll('nav a').forEach(a=>{if(new URL(a.href).pathname===location.pathname&&!new URL(a.href).hash)a.setAttribute('aria-current','page');a.addEventListener('click',()=>{more.open=false;});});
+document.addEventListener('pointerdown',e=>{if(!more.contains(e.target))more.open=false;});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&more.open){more.open=false;more.querySelector('summary').focus();}});

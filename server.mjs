@@ -10,6 +10,7 @@ const types = {
   ".webp": "image/webp",
   ".svg": "image/svg+xml",
   ".woff2": "font/woff2",
+  ".pdf": "application/pdf",
 };
 createServer(async (req, res) => {
   try {
@@ -27,6 +28,8 @@ createServer(async (req, res) => {
     const body = await readFile(file);
     res.writeHead(200, {
       "Content-Type": types[extname(file)] || "application/octet-stream",
+      "X-Content-Type-Options": "nosniff",
+      "Referrer-Policy": "strict-origin-when-cross-origin",
     });
     res.end(body);
   } catch {
